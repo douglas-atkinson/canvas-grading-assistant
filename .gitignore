@@ -45,3 +45,5 @@ env/
 .DS_Store
 Thumbs.db
 canvas_exports/
+
+output/
