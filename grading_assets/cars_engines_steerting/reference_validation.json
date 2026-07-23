@@ -1,0 +1,9 @@
+{
+  "compile_command": "g++ -std=c++17 -Wall -Wextra -pedantic car.cpp engine.cpp steering.cpp Car_Engine_Steering_main.cpp -o /mnt/data/grading_assets_cars_engines_steering/instructor_reference/reference_solution_test",
+  "compile_return_code": 0,
+  "compiler_stdout": "",
+  "compiler_stderr": "",
+  "run_return_code": 0,
+  "program_stdout": "Car: 1001 Toyota Corolla\n        Horsepower: 132\n        Cubic capacity: 1798\n        Steering type: power\n        Wheel diameter: 15.5\n\nCar: 1002 Ford Mustang\n        Horsepower: 450\n        Cubic capacity: 4951\n        Steering type: manual\n        Wheel diameter: 16\n\nCar: 1003 Honda Civic\n        Horsepower: 158\n        Cubic capacity: 1996\n        Steering type: power\n        Wheel diameter: 16.5\n\nCar: 1004 Chevrolet Camaro\n        Horsepower: 275\n        Cubic capacity: 1998\n        Steering type: manual\n        Wheel diameter: 17\n\nCar: 1005 BMW 3 Series\n        Horsepower: 255\n        Cubic capacity: 1998\n        Steering type: power\n        Wheel diameter: 16\n\nCar: 1006 Audi A4\n        Horsepower: 201\n        Cubic capacity: 1984\n        Steering type: power\n        Wheel diameter: 17.5\n\nCar: 1007 Mazda MX-5\n        Horsepower: 181\n        Cubic capacity: 1998\n        Steering type: manual\n        Wheel diameter: 16\n\nCar: 1008 Subaru Impreza\n        Horsepower: 152\n        Cubic capacity: 1995\n        Steering type: power\n        Wheel diameter: 17\n\nCar: 1009 Volkswagen Golf\n        Horsepower: 147\n        Cubic capacity: 1395\n        Steering type: power\n        Wheel diameter: 15\n\nCar: 1010 Nissan 370Z\n        Horsepower: 332\n        Cubic capacity: 3696\n        Steering type: manual\n        Wheel diameter: 18\n\n",
+  "program_stderr": ""
+}

@@ -26,9 +26,7 @@ It does NOT:
 
 Usage
 -----
-python module_4_download_submission.py \
-    output/assignment_3572383_historical_private_submissions.json \
-    submission_001
+
 
 To replace an existing local working folder:
 python module_4_download_submission.py \

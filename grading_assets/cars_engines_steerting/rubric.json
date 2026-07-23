@@ -1,0 +1,188 @@
+{
+  "rubric_id": "cars_engines_steering_v1",
+  "title": "Cars, Engines, and Steering Rubric",
+  "maximum_points": 200,
+  "scoring_authority_order": [
+    "rubric",
+    "assignment_specification",
+    "instructor_grading_notes",
+    "validated_reference_implementation"
+  ],
+  "criteria": [
+    {
+      "id": "car_class",
+      "name": "Car Class",
+      "maximum_points": 50,
+      "items": [
+        {
+          "id": "car_private_members",
+          "description": "Correct private data members",
+          "maximum_points": 10
+        },
+        {
+          "id": "car_constructor",
+          "description": "Five-parameter constructor implemented correctly",
+          "maximum_points": 10
+        },
+        {
+          "id": "car_accessors_mutators",
+          "description": "Required getters and setters implemented correctly",
+          "maximum_points": 10
+        },
+        {
+          "id": "car_print",
+          "description": "print() outputs the required car, engine, and steering information",
+          "maximum_points": 10
+        },
+        {
+          "id": "car_composition",
+          "description": "Correct object composition using Engine and Steering objects as Car members",
+          "maximum_points": 10
+        }
+      ]
+    },
+    {
+      "id": "engine_class",
+      "name": "Engine Class",
+      "maximum_points": 40,
+      "items": [
+        {
+          "id": "engine_private_members",
+          "description": "Correct private data members",
+          "maximum_points": 10
+        },
+        {
+          "id": "engine_constructor",
+          "description": "Two-parameter constructor implemented correctly",
+          "maximum_points": 10
+        },
+        {
+          "id": "engine_accessors_mutators",
+          "description": "Required getters and setters implemented correctly",
+          "maximum_points": 10
+        },
+        {
+          "id": "engine_print",
+          "description": "print() outputs the required engine information",
+          "maximum_points": 10
+        }
+      ]
+    },
+    {
+      "id": "steering_class",
+      "name": "Steering Class",
+      "maximum_points": 40,
+      "items": [
+        {
+          "id": "steering_private_members",
+          "description": "Correct private data members",
+          "maximum_points": 10
+        },
+        {
+          "id": "steering_constructor",
+          "description": "Two-parameter constructor implemented correctly",
+          "maximum_points": 10
+        },
+        {
+          "id": "steering_accessors_mutators",
+          "description": "Required getters and setters implemented correctly",
+          "maximum_points": 10
+        },
+        {
+          "id": "steering_print",
+          "description": "print() outputs the required steering information",
+          "maximum_points": 10
+        }
+      ]
+    },
+    {
+      "id": "program_correctness",
+      "name": "Program Correctness",
+      "maximum_points": 40,
+      "items": [
+        {
+          "id": "program_compiles",
+          "description": "Compiles without errors",
+          "maximum_points": 10,
+          "preferred_evidence": "local_compile_result"
+        },
+        {
+          "id": "works_with_main",
+          "description": "Works correctly with the supplied main program",
+          "maximum_points": 10,
+          "preferred_evidence": "local_compile_and_run_result"
+        },
+        {
+          "id": "output_format",
+          "description": "Output contains the required information in a substantially correct format",
+          "maximum_points": 10,
+          "preferred_evidence": "local_program_output"
+        },
+        {
+          "id": "all_cars_processed",
+          "description": "Reads and displays all cars correctly",
+          "maximum_points": 10,
+          "preferred_evidence": "local_program_output"
+        }
+      ]
+    },
+    {
+      "id": "code_quality_organization",
+      "name": "Code Quality and Organization",
+      "maximum_points": 20,
+      "items": [
+        {
+          "id": "file_separation",
+          "description": "Proper separation into header and implementation files",
+          "maximum_points": 10
+        },
+        {
+          "id": "readability_organization",
+          "description": "Readable code, meaningful naming, consistent formatting, and sound organization",
+          "maximum_points": 10
+        }
+      ]
+    },
+    {
+      "id": "exception_handling_validation",
+      "name": "Exception Handling and Validation",
+      "maximum_points": 10,
+      "items": [
+        {
+          "id": "validation_exceptions",
+          "description": "Appropriate validation and exceptions in constructors and setters where required",
+          "maximum_points": 10
+        }
+      ]
+    }
+  ],
+  "global_rules": [
+    {
+      "id": "noncompiling_cap",
+      "description": "If the program does not compile, the score is capped at 100 out of 200 until corrected.",
+      "application": "Apply after criterion scoring using verified local compilation evidence."
+    },
+    {
+      "id": "missing_source_file",
+      "description": "Deduct 10 points for each missing required source file.",
+      "application": "Use the local submission manifest; avoid double-penalizing the same defect within a criterion."
+    },
+    {
+      "id": "incorrect_filename",
+      "description": "Deduct 5 points for each incorrect required filename when the naming error materially affects the required project structure or build.",
+      "application": "Use local file inventory and instructor judgment."
+    },
+    {
+      "id": "missing_zip",
+      "description": "Deduct 5 points when the assignment required a ZIP submission and the student did not submit one.",
+      "application": "Use Canvas attachment metadata; do not ask the AI to infer this."
+    },
+    {
+      "id": "composition_failure",
+      "description": "Incorrect or missing composition may justify up to a 30-point deduction.",
+      "application": "Normally reflected in the Car Class criteria; avoid duplicate deductions."
+    }
+  ],
+  "comments_are_graded": false,
+  "instructor_review_required": true
+}

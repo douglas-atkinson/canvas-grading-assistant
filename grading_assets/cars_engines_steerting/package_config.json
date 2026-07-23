@@ -1,0 +1,26 @@
+{
+  "asset_package_id": "cars_engines_steering_v1",
+  "assignment_title": "Cars, Engines, and Steering",
+  "language": "C++",
+  "expected_standard": "C++17",
+  "assignment_specification": "assignment_spec.md",
+  "rubric": "rubric.json",
+  "instructor_notes": "instructor_notes.md",
+  "reference_solution_directory": "instructor_reference",
+  "supporting_files": [
+    "supporting_files/car_data.csv"
+  ],
+  "starter_files": [
+    "starter_files/Car_Engine_Steering_main.cpp"
+  ],
+  "starter_file_note": "The main program was supplied to students. Grade it primarily as integration context. Do not award significant credit for unchanged starter code.",
+  "reference_solution_role": "Validated example of one successful implementation; lowest authority and never a textual-similarity target.",
+  "authority_order": [
+    "rubric.json",
+    "assignment_spec.md",
+    "instructor_notes.md",
+    "instructor_reference/"
+  ],
+  "student_comments_removed_before_ai": true,
+  "human_review_required": true
+}
