@@ -47,3 +47,5 @@ Thumbs.db
 canvas_exports/
 
 output/
+
+*.zip
