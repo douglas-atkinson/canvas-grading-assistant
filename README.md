@@ -1,433 +1,325 @@
-# Canvas API Template
+# Canvas Grading Assistant
 
-A minimal template project for connecting to the Canvas API and modifying courses. Ready to fork and use in a dev container.
+A privacy-conscious, human-in-the-loop grading assistant for programming assignments submitted through Canvas.
 
----
+The project began as a small Canvas API exploration and grew into a working end-to-end prototype that can retrieve a programming submission, prepare a privacy-safe copy, compile and run the code locally, request an advisory AI evaluation, validate the structured response, and create a readable one-student grading report.
 
-# 🚀 Quick Start (Recommended)
+> **Project status:** Working prototype through Module 8. Active refactoring toward an end-user alpha.
 
-1. Click **Use this template** on GitHub  
-2. Create your new repository  
-3. Open it in **Codespaces**
+## Why This Project Exists
 
-4. Add your Canvas credentials
+Programming assignments are time-consuming to grade well. A useful grading assistant should do more than produce a score: it should preserve instructor authority, respect student privacy, cite evidence, apply a rubric consistently, and make every automated decision reviewable.
 
-Go to:
+This project is designed around those requirements.
 
-Settings → Secrets and variables → Codespaces
+The AI is advisory only. It does not determine the final grade, and the current project does not post grades or feedback to Canvas.
 
-Create these secrets:
+## Current Capabilities
 
-CANVAS_URL  
-CANVAS_TOKEN  
-COURSE_ID  
+The working prototype supports the following workflow:
 
-5. Run the template:
+1. Connect to Canvas and inspect a course.
+2. Select and inspect an assignment.
+3. Retrieve submission metadata.
+4. Download and safely extract one submitted ZIP archive.
+5. Create a separate AI-candidate copy of the source code.
+6. Remove comments and redact known identifiers while preserving useful line positions.
+7. Build a provider-neutral grading package.
+8. Compile the student program locally with an explicitly selected compiler.
+9. Optionally execute untrusted student code with an explicit flag and timeout.
+10. Compare runtime output with validated reference output.
+11. Send one structured advisory grading request to a configured model provider.
+12. Validate the returned JSON against schema and project-specific rules.
+13. Revalidate saved results locally without paying for another model request.
+14. Restore the student identity locally after all provider activity is complete.
+15. Produce canonical JSON and readable Markdown grading reports.
+
+The current tested workflow uses C++ submissions, Canvas, GCC through MSYS2, and OpenAI as the model provider.
+
+## Core Design Principles
+
+### Human Review Is Required
+
+The model returns a grading suggestion, not a final grade.
+
+Every generated instructor report is explicitly marked:
+
+```json
+{
+  "approval": {
+    "status": "NOT_APPROVED",
+    "final_score": null
+  }
+}
+```
+
+Instructor approval and Canvas writeback belong to later, separate stages.
+
+### Privacy by Separation
+
+Private Canvas metadata and AI-safe material are stored separately.
+
+The model-facing package excludes:
+
+- student names;
+- Canvas user IDs;
+- attachment download URLs;
+- original ZIP filenames;
+- private submission metadata not needed for grading.
+
+Student identity is restored only after the model response has been saved and validated locally.
+
+### Student Code Is Untrusted
+
+Compilation and execution are separate operations.
+
+Student code is executed only when the instructor explicitly enables execution. Runtime is constrained by a timeout, and the result is captured as objective evidence.
+
+This prototype is not yet a hardened sandbox. Do not treat local execution as suitable for hostile code.
+
+### Objective Evidence Beats Guesswork
+
+When available, local evidence is stronger than source-code inference:
+
+- compiler and version;
+- compile command;
+- return code;
+- warnings and errors;
+- execution status;
+- standard output and standard error;
+- timeout result;
+- normalized output comparison.
+
+Missing evidence must not automatically become a deduction.
+
+### Deterministic Data Contracts
+
+Rubrics, grading packages, model responses, validation reports, and instructor reports use structured JSON contracts.
+
+The long-term alpha will validate these contracts through shared typed models rather than relying on AI to transform arbitrary documents into usable data.
+
+## Prototype Workflow
+
+```text
+Canvas
+  |
+  v
+Course and assignment inspection
+  |
+  v
+Private submission manifest
+  |
+  v
+Safe download and extraction
+  |
+  v
+Privacy-safe student-material copy
+  |
+  v
+Grading package plus local compile/run evidence
+  |
+  v
+Advisory model evaluation
+  |
+  v
+Schema and domain validation
+  |
+  v
+Private one-student instructor report
+```
+
+The prototype currently implements this flow as numbered development modules. Those modules intentionally produce inspectable artifacts at every stage.
+
+That approach was valuable for development and debugging. The active `alpha-refactor` branch is reorganizing the same proven behavior into reusable services and application workflows.
+
+## Project Milestone
+
+The tag:
+
+```text
+prototype-modules-1-through-8
+```
+
+marks the known working prototype through the one-student grading-report stage.
+
+Current branches:
+
+- `main` — stable project history and integrated work;
+- `alpha-refactor` — active application refactoring.
+
+## Planned Alpha
+
+The end-user alpha is intended to add:
+
+- shared domain models and versioned schemas;
+- reusable Canvas, privacy, execution, grading, and reporting services;
+- a coherent command-line application;
+- deterministic assignment-package creation and validation;
+- resumable workspace and run manifests;
+- sequential processing of multiple submissions;
+- an instructor review workbook;
+- validated import of instructor-approved grades;
+- complete audit trails and recovery information.
+
+The alpha will still stop before automatic Canvas writeback.
+
+## Later Version 1 Goals
+
+A later operational version may add:
+
+- proposed-change previews;
+- explicit instructor approval gates;
+- protected Canvas grade and feedback posting;
+- duplicate-post prevention;
+- additional model providers;
+- local-model evaluation;
+- a desktop or local web interface;
+- installation and recovery tooling.
+
+## Repository Direction
+
+The target architecture separates the project into focused areas such as:
+
+```text
+canvas
+submissions
+privacy
+execution
+grading
+reporting
+review
+storage
+workflows
+domain models
+configuration
+```
+
+The current numbered scripts will remain available until their replacements reproduce the working prototype through automated regression tests.
+
+## Development Setup
+
+The project is under active refactoring, so setup instructions may change.
+
+### Requirements
+
+- Python 3
+- A Canvas account with API access
+- A Canvas API token
+- Access to a Canvas course and assignment
+- A supported C++ compiler for local compilation
+- A configured model-provider account for live advisory evaluation
+
+The tested Windows compiler setup uses the MSYS2 UCRT64 build of GCC.
+
+### Local Environment
+
+Create and activate a virtual environment, then install the project requirements:
 
 ```bash
-python canvas_template.py
+python -m venv .venv
 ```
 
----
+Windows Command Prompt:
 
-# Prerequisites
-
-- Canvas instance with API access enabled  
-- API token from your Canvas account  
-
----
-
-# Full Setup with Detailed Instructions
-
-## 1. Open in Dev Container
-
-### Option A: GitHub Codespaces (Easiest - No Local Setup Required)
-
-In your repository on GitHub:
-
-1. Click the green **Code** button  
-2. Select the **Codespaces** tab  
-3. Click **Create codespace on main**  
-
-Wait for the container to build automatically (2–3 minutes).
-
-The environment is ready — all dependencies are pre-installed.
-
----
-
-### Option B: VS Code Desktop
-
-Open this folder in VS Code on your local machine.
-
-When prompted, click **Reopen in Container**
-
-(or press **Ctrl + Shift + P** and search  
-`Dev Containers: Reopen in Container`)
-
-Wait for the container to build (dependencies will install automatically).
-
-Codespaces is recommended — you don't need anything installed locally, just a web browser.
-
----
-
-# 2. Configure Environment
-
-### Option A: Codespaces Secrets (Recommended for Codespaces)
-
-If using GitHub Codespaces, use encrypted secrets for secure credential storage.
-
-Go to your GitHub repo (not inside Codespaces):
-
-Settings → Secrets and variables → Codespaces
-
-Create new secrets:
-
-CANVAS_URL  
-CANVAS_TOKEN  
-COURSE_ID  
-
-The `.env` will read from these automatically (no file needed).
-
-This keeps your credentials secure and encrypted by GitHub.
-
----
-
-### Option B: Local `.env` file (Quick Start)
-
-```bash
-cp .env.example .env
+```cmd
+.venv\Scripts\activate
+pip install -r requirements.txt
 ```
 
-Edit `.env` with your Canvas credentials:
+Create a local `.env` file based on `.env.example` and provide the required Canvas settings:
 
-```
+```text
 CANVAS_URL=https://your-institution.instructure.com
-CANVAS_TOKEN=your_api_token_here
-COURSE_ID=123456
+CANVAS_TOKEN=your_canvas_api_token
+COURSE_ID=your_course_id
 ```
 
----
+Never commit `.env`.
 
-# 3. Run the Template
+Provider configuration is stored separately from student data. Do not place API keys in source files, JSON artifacts, screenshots, documentation, issues, or commits.
 
-```bash
-python canvas_template.py
-```
+## Safety and Privacy Warning
 
----
+This project processes educational records and may handle FERPA-protected information.
 
-# Expected Output
+Do not commit or publish:
 
-When you run the script successfully, you should see:
+- downloaded student submissions;
+- private manifests;
+- student names or Canvas user IDs;
+- grading reports containing student identities;
+- model request or response files containing private information;
+- Canvas access tokens;
+- provider API keys;
+- `.env` files;
+- generated `output`, `workspace`, or run directories.
 
-```
-🔗 Connecting to Canvas: https://your-institution.instructure.com
-📚 Fetching course 123456...
+Before using this project with real students, review your institution's policies for:
 
-✅ Successfully connected!
-   Course Name: Introduction to Python
-   Course ID: 123456
+- student privacy;
+- third-party AI services;
+- data retention;
+- automated decision support;
+- source-code execution;
+- Canvas API use.
 
-📋 Course Content:
-   Number of modules: 4
-   Module Names:
-     - Week 1: Getting Started
-     - Week 2: Variables and Types
-     - Week 3: Functions
-     - Week 4: Projects
+The instructor remains responsible for every final grading decision.
 
-🎉 Success! Your Canvas API connection is working.
-   Next steps: Uncomment examples above or explore the Canvas API docs
-```
+## Testing Philosophy
 
-If you see an error instead, check **TROUBLESHOOTING.md** for solutions.
+The refactor will preserve known end-to-end regression scenarios, including:
 
----
+- a successful full-credit submission;
+- compilation failure;
+- missing source files;
+- runtime timeout;
+- malformed provider output;
+- missing local evidence;
+- privacy-leak detection;
+- altered review-workbook data.
 
-# Running Locally (Optional)
+Tests must not contact Canvas or a model provider unless explicitly marked as live integration tests.
 
-If you prefer running the project locally instead of Codespaces:
+## Contributing
 
-```bash
-git clone <your-repo-url>
-cd canvas-api-template
-```
+The project is being developed primarily as an instructional and practical tool, but contributions, issue reports, architecture discussions, and assignment-package examples are welcome.
 
-Then open the folder in **VS Code** and select:
+Before contributing:
 
-```
-Dev Containers: Reopen in Container
-```
+1. Do not include real student data.
+2. Do not include credentials or private run artifacts.
+3. Preserve the human-review boundary.
+4. Do not weaken privacy or validation checks merely to make a test pass.
+5. Keep provider-specific code behind a provider abstraction.
+6. Add or update tests for behavior changes.
 
-Follow the environment configuration steps above.
+## Public Project Status
 
----
+This repository may be made public while the alpha is still under development.
 
-# Finding Your Course ID
+That is intentional. The project is useful as an example of:
 
-You need your Canvas course ID to get started.
+- incremental API exploration;
+- privacy-aware AI integration;
+- artifact-driven development;
+- deterministic validation;
+- human-in-the-loop grading architecture;
+- refactoring a working prototype into an application.
 
-## Method 1: From the URL (Easiest)
+It should not yet be represented as production-ready grading software.
 
-Go to your Canvas course.
+## Origins
 
-Look at the URL in your browser.
+This repository began from a Canvas API course template used for an AI-assisted programming course. The template provided the initial Canvas connection and development environment. The grading workflow, privacy pipeline, local evidence system, model validation, and reporting architecture were developed as the capstone evolved.
 
-Find the number after `/courses/`
+## License
 
-```
-https://your-institution.instructure.com/courses/123456/modules
-                                                   ^^^^^^
-                                               Course ID
-```
+This project is licensed under the MIT License. See `LICENSE` for details.
 
----
+Instructors and developers are welcome to study, adapt, and extend the project for their own courses and institutions, subject to their local privacy, security, and academic policies.
 
-## Method 2: From Course Settings
+## Disclaimer
 
-In Canvas:
+This software is provided as-is.
 
-1. Click **Settings** (bottom left of course menu)  
-2. Look for **Course ID** displayed on the page  
-3. Copy the number (digits only)
-
----
-
-## Method 3: From Canvas Admin
-
-If you don't have direct access to the course:
-
-- Ask your Canvas instructor or administrator  
-- Provide the course name and they can give you the ID  
-
----
-
-# Getting Your Canvas API Token
-
-1. Log in to Canvas  
-2. Click your profile picture → **Settings**  
-3. Scroll to **Approved Integrations**  
-4. Click **New Access Token**  
-5. Copy the generated token (you will only see it once)
-
----
-
-# Usage Examples
-
-The template script `canvas_template.py` demonstrates:
-
-- Connecting to Canvas API  
-- Retrieving course information  
-- Listing course modules  
-
-Extend it by uncommenting examples or adding new functionality.
-
----
-
-# Canvas API Documentation
-
-- Canvas API Docs  
-- canvasapi Python Library  
-
----
-
-# Troubleshooting
-
-Having issues?
-
-Check **TROUBLESHOOTING.md** for solutions to common problems:
-
-- Configuration errors (missing credentials, invalid Course ID)  
-- Connection issues (can't reach Canvas, invalid token)  
-- Codespaces-specific problems  
-- Debugging steps when nothing else works  
-
----
-
-# Common Operations
-
-### Update Course Name
-
-```python
-course.update(course={'name': 'New Name'})
-```
-
-### Get Assignments
-
-```python
-assignments = course.get_assignments()
-```
-
-### Create an Assignment
-
-```python
-course.create_assignment({'name': 'New Assignment'})
-```
-
-### Get Students
-
-```python
-students = course.get_users(enrollment_type=['student'])
-```
-
----
-
-# Security
-
-Your Canvas API token is a secret key that grants full access to your Canvas account. Treat it like a password.
-
----
-
-# ✅ Best Practices
-
-## 1. Secure Storage
-
-### For Codespaces Users (Recommended)
-
-Use Codespaces encrypted secrets to store credentials.
-
-GitHub encrypts secrets server-side with AES-256  
-Secrets are only decrypted when your codespace runs  
-They never appear in logs, code, or git history  
-
-This is the most secure option.
-
----
-
-### For Local Development
-
-Keep `.env` out of git — the `.gitignore` file ensures `.env` is never accidentally committed.
-
-Before committing:
-
-```
-git status
-```
-
-Verify `.env` does not appear.
-
-Use `.env` locally only. Never copy credentials into code files.
-
----
-
-## 2. Never Share Your Token
-
-🚫 Never paste your token in:
-
-- GitHub issues or pull requests  
-- Chat applications (Slack, Discord, Teams, etc.)  
-- Email or forums  
-- Code comments or documentation  
-- Stack Overflow or public debugging  
-
-If you accidentally expose a token:
-
-1. Delete it in Canvas **Settings → Approved Integrations**  
-2. Create a new token  
-3. Update your configuration  
-
----
-
-## 3. Set Token Expiration
-
-When creating your Canvas API token, set an expiration date.
-
-Go to:
-
-```
-Canvas Settings → Approved Integrations
-```
-
-Shorter tokens (1–3 months) are more secure.
-
-Recommendation: rotate tokens every 3 months.
-
----
-
-## 4. What To Do If Compromised
-
-If you suspect your token was exposed:
-
-1. Delete the token immediately  
-2. Check Canvas activity logs for suspicious access  
-3. Create a new token  
-4. Update all machines and environments  
-
----
-
-## 5. Environment Variable Safety
-
-This template uses environment variables instead of hardcoded credentials.
-
-⚠️ Never debug with credentials.
-
-Bad:
-
-```python
-print(f"Token: {CANVAS_TOKEN}")
-print(os.getenv('CANVAS_TOKEN'))
-```
-
-Good:
-
-```python
-print(f"Canvas URL: {CANVAS_URL}")
-print("Successfully connected to Canvas")
-```
-
----
-
-## 6. Monitor Canvas Audit Logs
-
-Canvas keeps an audit log of all API access.
-
-```
-Canvas Admin → Logs → API Access Logs
-```
-
-If suspicious activity appears, delete the token immediately.
-
----
-
-## 7. Forking This Repository
-
-If you fork this template:
-
-- Verify this repo never had real credentials committed  
-- Generate your own API tokens  
-- Start with `.env.example`  
-
-Each environment should use separate tokens.
-
----
-
-# ⚠️ Why This Matters
-
-If someone gains your `CANVAS_TOKEN`, they could:
-
-- Modify grades and assignments  
-- Change course content  
-- Add or remove students  
-- Delete course materials  
-- Access sensitive student data  
-- Post messages as you  
-
----
-
-# 🔍 Verification Checklist
-
-Before pushing to GitHub:
-
-```
-# Verify .env is NOT in git
-git status
-
-# Verify .gitignore includes .env
-cat .gitignore | grep env
-
-# Search for hardcoded tokens
-git log --all -p | grep -i "token\|canvas"
-
-# Check recent commits
-git log --name-only -n 5 | grep env
-```
+It is an experimental instructor-support tool, not an autonomous grading authority. Always review source evidence, model recommendations, calculated totals, and proposed feedback before using the results in an academic setting.
