@@ -243,6 +243,20 @@ Never perform Canvas write operations during tests.
 
 Do not begin with a repository-wide rewrite.
 
+### Task Scope Declaration
+
+Before beginning a task, state:
+
+- the exact files expected to change;
+- the behavior being changed or preserved;
+- the tests that will be added or run;
+- actions that are explicitly out of scope;
+- the condition at which work must stop for review.
+
+Do not expand the task because adjacent cleanup appears convenient.
+Do not modify files outside the stated scope without explicit approval.
+Stop after completing the requested increment. Do not automatically begin the next roadmap task.
+
 ### For Repository Audits
 
 When asked to audit or map the repository:
@@ -564,6 +578,13 @@ commit messages.
 - Do not assume a Unix-only shell or filesystem layout.
 - Keep line lengths and formatting consistent with the existing project unless
   a formatter is intentionally adopted.
+- Follow PEP 8 for new and modified Python code unless an established project
+  convention or generated format requires otherwise.
+- Prefer readability over mechanical rule compliance.
+- Do not reformat unrelated files or perform repository-wide style changes
+  without explicit approval.
+- New or modified code should pass the project's configured formatter and
+  linter once those tools are adopted.
 
 ---
 
