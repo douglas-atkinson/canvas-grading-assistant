@@ -1,0 +1,27 @@
+{
+  "module": {
+    "number": "5.1",
+    "purpose": "Prepare AI-candidate source copy"
+  },
+  "privacy": {
+    "classification": "AI-candidate package metadata",
+    "contains_canvas_user_id": false,
+    "contains_student_name": false,
+    "contains_original_zip_filename": false,
+    "contains_download_urls": false
+  },
+  "submission": {
+    "anonymous_label": "submission_002",
+    "selected_attempt": 1
+  },
+  "package": {
+    "candidate_root": "synthetic_fixture_workspace/submission_002/ai_candidate",
+    "source_file_count": 1,
+    "comments_removed": true,
+    "known_identifiers_redacted": true,
+    "human_review_required": true,
+    "approved_for_ai": false,
+    "files": ["main.cpp"]
+  },
+  "warnings": []
+}
