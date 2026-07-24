@@ -1,0 +1,223 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Programming Assignment Grading Suggestion",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "submission_label",
+    "rubric_item_results",
+    "global_rule_assessments",
+    "student_feedback",
+    "instructor_summary",
+    "overall_confidence",
+    "manual_review_flags"
+  ],
+  "properties": {
+    "submission_label": {
+      "type": "string",
+      "minLength": 1
+    },
+    "rubric_item_results": {
+      "type": "array",
+      "minItems": 20,
+      "maxItems": 20,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "criterion_id",
+          "item_id",
+          "maximum_points",
+          "assessment_status",
+          "suggested_points",
+          "rationale",
+          "evidence",
+          "confidence",
+          "manual_review_needed"
+        ],
+        "properties": {
+          "criterion_id": {
+            "type": "string",
+            "enum": [
+              "car_class",
+              "code_quality_organization",
+              "engine_class",
+              "exception_handling_validation",
+              "program_correctness",
+              "steering_class"
+            ]
+          },
+          "item_id": {
+            "type": "string",
+            "enum": [
+              "all_cars_processed",
+              "car_accessors_mutators",
+              "car_composition",
+              "car_constructor",
+              "car_print",
+              "car_private_members",
+              "engine_accessors_mutators",
+              "engine_constructor",
+              "engine_print",
+              "engine_private_members",
+              "file_separation",
+              "output_format",
+              "program_compiles",
+              "readability_organization",
+              "steering_accessors_mutators",
+              "steering_constructor",
+              "steering_print",
+              "steering_private_members",
+              "validation_exceptions",
+              "works_with_main"
+            ]
+          },
+          "maximum_points": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 10.0
+          },
+          "assessment_status": {
+            "type": "string",
+            "enum": [
+              "scored",
+              "requires_local_evidence"
+            ]
+          },
+          "suggested_points": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "minimum": 0,
+            "maximum": 10.0
+          },
+          "rationale": {
+            "type": "string"
+          },
+          "evidence": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "file",
+                "line_start",
+                "line_end",
+                "description"
+              ],
+              "properties": {
+                "file": {
+                  "type": "string"
+                },
+                "line_start": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ],
+                  "minimum": 1
+                },
+                "line_end": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ],
+                  "minimum": 1
+                },
+                "description": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "confidence": {
+            "type": "string",
+            "enum": [
+              "high",
+              "medium",
+              "low"
+            ]
+          },
+          "manual_review_needed": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "global_rule_assessments": {
+      "type": "array",
+      "minItems": 5,
+      "maxItems": 5,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "rule_id",
+          "applicable",
+          "recommended_action",
+          "recommended_value",
+          "rationale",
+          "objective_evidence_required",
+          "manual_review_needed"
+        ],
+        "properties": {
+          "rule_id": {
+            "type": "string",
+            "enum": [
+              "composition_failure",
+              "incorrect_filename",
+              "missing_source_file",
+              "missing_zip",
+              "noncompiling_cap"
+            ]
+          },
+          "applicable": {
+            "type": "boolean"
+          },
+          "recommended_action": {
+            "type": "string",
+            "enum": [
+              "none",
+              "deduction",
+              "score_cap"
+            ]
+          },
+          "recommended_value": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 200
+          },
+          "rationale": {
+            "type": "string"
+          },
+          "objective_evidence_required": {
+            "type": "boolean"
+          },
+          "manual_review_needed": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "student_feedback": {
+      "type": "string"
+    },
+    "instructor_summary": {
+      "type": "string"
+    },
+    "overall_confidence": {
+      "type": "string",
+      "enum": [
+        "high",
+        "medium",
+        "low"
+      ]
+    },
+    "manual_review_flags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

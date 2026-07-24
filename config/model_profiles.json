@@ -1,0 +1,17 @@
+{
+  "active_profile": "openai_primary",
+  "profiles": {
+    "openai_primary": {
+      "provider": "openai",
+      "model": "gpt-5.2",
+      "api_key_env": "OPENAI_API_KEY",
+      "reasoning_effort": "medium",
+      "max_output_tokens": 8000,
+      "timeout_seconds": 180,
+      "max_retries": 0,
+      "response_format_name": "grading_suggestion",
+      "store": false,
+      "max_input_characters": 500000
+    }
+  }
+}

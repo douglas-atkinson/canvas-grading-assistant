@@ -1,0 +1,14 @@
+==============================================================================
+MODULE 7 REQUEST
+==============================================================================
+Mode:             dry_run
+Provider profile: openai_primary
+Provider:         openai
+Model:            gpt-5.6
+Input characters: 2,832
+Run directory:    /mnt/data/module_7_provider_neutral/_self_test2/model_runs/20260723_164903_openai_gpt-5_6
+Canvas contacted: No
+
+DRY RUN COMPLETE
+No model provider was contacted.
+Review request_payload.json, then rerun with --send.

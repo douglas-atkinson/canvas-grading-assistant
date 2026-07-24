@@ -1,0 +1,21 @@
+Module 6/7 targeted update self-test
+====================================
+
+Module 6 syntax check: PASS
+Module 7 syntax check: PASS
+Module 6 compile test: PASS
+Module 6 execution test: PASS
+Normalized reference-output comparison: PASS
+Existing model_runs preservation on --overwrite: PASS
+Module 7 dry-run request build: PASS
+Prompt version module7-grading-v2: PASS
+Response schema assessment_status support: PASS
+Semantic validation of a well-formed result: PASS
+Rejection of requires_local_evidence with numeric points: PASS
+Rejection of unknown evidence filenames: PASS
+Private Canvas PID absent from outbound package: PASS
+Original ZIP filename absent from outbound package: PASS
+Temporary build path absent from outbound evidence: PASS
+
+No OpenAI request was made during these tests.
+No Canvas request or change was made during these tests.
