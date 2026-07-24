@@ -673,33 +673,29 @@ This startup review should be lightweight. Its purpose is to restore context and
 
 ## Current Project Phase
 
-The project is currently preparing for the transition from the working Modules 1–8 prototype to the end-user alpha architecture.
+Phases 0 through 4 are complete: Freeze the Working Prototype, Documentation
+Foundation, Public-Release Safety Audit, Read-Only Repository Inventory, and
+Artifact Contract Inventory (including the OD-001 domain-model-library
+decision). See `ROADMAP.md` for full phase detail.
 
-The next repository-wide task is a one-time read-only architecture and code inventory.
+**Phase 5 — Shared Domain Models is the current phase.**
 
-### Produce a document that maps:
+The immediate next increment is the testing foundation, not model
+extraction:
 
-```text
-existing module/function/class
-current responsibility
-inputs
-outputs
-side effects
-dependencies
-proposed destination
-tests needed
-privacy or safety concerns
-```
+- add `pytest` as an intentional test dependency;
+- establish minimal test configuration and directories;
+- add synthetic Module 5.1 AI-package-manifest fixtures;
+- characterize the current Module 6 `validate_ai_manifest()` behavior.
 
-Do not move production code during this initial audit.
+No shared-model extraction may begin until the relevant characterization
+tests pass. `PrivacyClassification`/`ArtifactMetadata` is the accepted first
+model target (see `ARTIFACT_CONTRACTS.md` and
+`OD-001_DOMAIN_MODEL_LIBRARY.md`).
 
-The audit should identify the smallest safe sequence for extracting shared models and services while preserving the working Modules 1–8 pipeline.
-
-After the audit has been completed and accepted:
-
-- mark this phase complete in ROADMAP.md;
-- update the current project phase before beginning implementation;
-- do not repeat the full audit in later sessions unless repository changes make part of it obsolete.
+No numbered module may be deleted, renamed, moved, retired, or modified
+during the initial testing-foundation increment. That increment makes no
+Canvas calls, no model-provider calls, and executes no student code.
 
 ---
 

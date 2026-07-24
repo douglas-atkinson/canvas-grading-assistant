@@ -2098,27 +2098,26 @@ Student identity is restored only in the private reporting stage.
 The alpha refactor remains in the current repository, protected by branch and
 tag history.
 
+### AD-012 — Domain Model Library
+
+`OD-001` was resolved and accepted on 2026-07-24.
+
+Pydantic v2 is the primary model system for persisted artifact contracts and
+trust-boundary data. Standard-library dataclasses remain appropriate for
+small, transient, internal-only records. Recursive AI-safety scanning
+remains independent of Pydantic validation and is not replaced by it. Pure
+business logic may accept validated Pydantic models as read-only typed
+inputs but performs no boundary validation, serialization, migration,
+schema-generation, or I/O of its own. `PrivacyClassification`/
+`ArtifactMetadata` is the first model target.
+
+Full rationale is in `OD-001_DOMAIN_MODEL_LIBRARY.md`.
+
 ---
 
 ## Open Architectural Decisions
 
 The following decisions are intentionally deferred.
-
-### OD-001 — Domain Model Library
-
-Options include:
-
-- standard dataclasses plus manual validation;
-- Pydantic;
-- another lightweight validation library.
-
-Selection should consider:
-
-- schema generation;
-- migration support;
-- dependency weight;
-- clarity;
-- Windows compatibility.
 
 ### OD-002 — CLI Framework
 

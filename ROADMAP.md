@@ -1550,11 +1550,12 @@ Current high-impact decisions include:
 - local revalidation;
 - local score calculation;
 - identity restoration after provider activity;
-- current repository continues through alpha.
+- current repository continues through alpha;
+- domain model library (`OD-001`, accepted 2026-07-24 — see
+  `OD-001_DOMAIN_MODEL_LIBRARY.md`).
 
 Open decisions include:
 
-- domain model library;
 - CLI framework;
 - final user interface;
 - hardened execution environment;
@@ -1751,69 +1752,53 @@ Items 2–6 are documented in `PUBLIC_RELEASE_AUDIT.md` (reviewed and accepted
 2026-07-23). Items 7–10 are GitHub-side actions for the maintainer to take
 when actually publishing.
 
-## After Public Release
+## Phase 5 Startup Checklist
 
-1. [ ] Start a fresh Claude Code session.
-2. [ ] Read `CLAUDE.md`, `ARCHITECTURE.md`, `ROADMAP.md`, `README.md`,
-   `REPOSITORY_INVENTORY.md`, and `PUBLIC_RELEASE_AUDIT.md`.
-3. [ ] Complete Phase 4 — Artifact Contract Inventory.
-4. [ ] Review `ARTIFACT_CONTRACTS.md` with Doug and Sam.
-5. [ ] Decide `OD-001`: dataclasses versus Pydantic.
+1. [x] Start a fresh Claude Code session.
+2. [x] Run the lightweight Session Startup Protocol.
+3. [x] Complete Phase 4 — Artifact Contract Inventory.
+4. [x] Review and accept `ARTIFACT_CONTRACTS.md`.
+5. [x] Resolve and accept `OD-001`.
 6. [ ] Establish the minimal `pytest` foundation.
 7. [ ] Add characterization tests for the first extraction target.
-8. [ ] Begin Phase 5 incremental extraction only after those tests pass.
+8. [ ] Begin Phase 5 model extraction only after those tests pass.
 
-The repository inventory (`REPOSITORY_INVENTORY.md`) and the public-release
-safety audit (`PUBLIC_RELEASE_AUDIT.md`) are already complete and accepted —
-this sequence does not repeat either of them.
+Items 1–5 are complete: `ARTIFACT_CONTRACTS.md` and
+`OD-001_DOMAIN_MODEL_LIBRARY.md` were reviewed and accepted (2026-07-24).
+Items 6–8 remain — see "Current Recommended Next Task" above for the
+detailed testing-foundation increment. This checklist does not repeat the
+repository inventory or public-release audit, both already complete and
+accepted (`REPOSITORY_INVENTORY.md`, `PUBLIC_RELEASE_AUDIT.md`).
 
 ---
 
-# First Claude Code Audit Prompt
+# First Phase 5 Claude Code Startup Prompt
 
-A recommended initial prompt:
+A recommended startup-only prompt for a new session beginning Phase 5 work.
+This prompt is read-only and confirmatory — it does not authorize
+implementation:
 
 ```text
-Read CLAUDE.md, ARCHITECTURE.md, ROADMAP.md, and README.md.
+Read CLAUDE.md, ARCHITECTURE.md, ROADMAP.md, ARTIFACT_CONTRACTS.md,
+OD-001_DOMAIN_MODEL_LIBRARY.md, and README.md.
 
-We are in the Foundation and Repository Audit phase.
+Confirm the current Git branch and run git status.
 
-Perform a read-only architecture and code inventory of the tracked repository.
-Do not move, rename, delete, or rewrite production code.
+Review the latest commits relevant to the current phase.
 
-Create REPOSITORY_INVENTORY.md that maps the current Modules 1–8 implementation.
+Summarize the current Phase 5 state: what is complete (Phases 0-4, the
+OD-001 domain-model-library decision), what the accepted first model
+target is (PrivacyClassification / ArtifactMetadata), and what the
+testing-foundation increment requires before any extraction begins.
 
-For each important file, function, class, and artifact, document:
-- current responsibility
-- inputs
-- outputs
-- side effects
-- dependencies
-- artifacts consumed
-- artifacts produced
-- privacy classification
-- Canvas contact
-- model-provider contact
-- student-code execution
-- proposed destination in the target architecture
-- tests present
-- tests needed
-- risks or concerns
+Identify the testing-foundation increment (pytest setup, synthetic
+Module 5.1 AI-package-manifest fixtures, and characterization tests for
+Module 6's validate_ai_manifest()) as the next task.
 
-Also identify:
-- duplicated logic
-- hidden coupling
-- inconsistent schemas
-- public-release risks
-- the smallest safe extraction sequence
+Make no edits, commits, dependency changes, Canvas calls, model-provider
+calls, or student-code execution.
 
-Do not make network calls, provider calls, Canvas calls, or execute student code.
-
-At the end, summarize:
-- files created or changed
-- tests run
-- unresolved questions
-- your recommended first refactoring step
+Stop for Doug and Sam to review before any implementation begins.
 ```
 
 ---
