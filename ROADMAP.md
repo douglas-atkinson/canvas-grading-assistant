@@ -161,12 +161,18 @@ This run should become the foundation of a synthetic golden regression fixture.
 ## Phase Name
 
 ```text
-Phase 4 — Artifact Contract Inventory
+Phase 5 — Shared Domain Models
 ```
 
 ## Current Objective
 
-Prepare the repository for safe refactoring into an end-user alpha.
+Introduce shared, validated domain models incrementally, one artifact at a
+time, without changing prototype behavior. **No shared-model extraction may
+begin until the minimal `pytest` foundation and the relevant
+characterization test for the specific behavior being extracted both
+exist.** This requirement was decided 2026-07-23 (see "Decision Recorded
+2026-07-23" below) and remains binding now that Phase 5 is the current
+phase.
 
 ## Current Deliverables
 
@@ -181,8 +187,8 @@ Prepare the repository for safe refactoring into an end-user alpha.
 - [x] Public-release safety audit completed
 - [x] Read-only repository architecture inventory completed
 - [x] Refactor sequence reviewed and approved
-- [ ] Artifact contracts inventoried
-- [ ] First shared domain-model decision made
+- [x] Artifact contracts inventoried
+- [x] First shared domain-model decision made
 
 The read-only inventory is recorded in `REPOSITORY_INVENTORY.md`. It was
 reviewed and accepted on 2026-07-23. Its proposed extraction sequence (Part 4)
@@ -196,6 +202,22 @@ containing protected data exist anywhere in the repository's full Git
 history. The two non-blocking hygiene items it identified (a leaked,
 unrelated debug trace in `SELF_TEST_VALIDATOR_PATCH.txt`, and a
 `workspace/`/`runs/` `.gitignore` gap) have since been resolved.
+
+The artifact contract inventory is recorded in `ARTIFACT_CONTRACTS.md`. It
+documents 30 persisted/derived artifacts (the 27 required by Phase 4's
+minimum list plus 3 additional diagnostic/preview artifacts found during
+inspection) and records the accepted first-formalization order:
+`PrivacyClassification`/`ArtifactMetadata` first, `Rubric`/
+`RubricCriterion`/`RubricItem` next.
+
+The domain-model-library decision (`OD-001`) is recorded in
+`OD-001_DOMAIN_MODEL_LIBRARY.md`. It was **accepted on 2026-07-24**: Pydantic
+v2 is the primary model system for persisted artifact contracts and
+external/trust-boundary data; standard-library dataclasses remain
+appropriate for small, transient, internal-only records; recursive
+AI-safety/privacy scanning remains independent of Pydantic validation and is
+not replaced by it; and `PrivacyClassification`/`ArtifactMetadata` is
+confirmed as the first model target.
 
 ## Decision Recorded 2026-07-23
 
@@ -212,43 +234,74 @@ Task below.
 
 ## Current Phase Pointer
 
-Phase 2 (Public-Release Safety Audit) and Phase 3 (Read-Only Repository
-Inventory) are both complete. The remaining Foundation-and-Repository-Audit
-deliverables — artifact contracts inventoried, first shared domain-model
-decision made — belong to Phase 4, which is next. Changing the repository's
-actual GitHub visibility to public is a separate, explicit, maintainer-owned
-action (see Phase 2's "Public Release Decision" and the "Immediate Action
-List" below) and is not implied by this documentation work.
+Phases 0 through 4 are complete: Freeze the Working Prototype,
+Documentation Foundation, Public-Release Safety Audit, Read-Only Repository
+Inventory, and Artifact Contract Inventory (including `OD-001`'s
+domain-model-library decision). Phase 5 (Shared Domain Models) is now the
+current phase. The next controlled work is, in order:
+
+1. establish a minimal, runnable `pytest` foundation;
+2. add synthetic fixtures (no real student data, per `CLAUDE.md`);
+3. characterize the current Module 6 `validate_ai_manifest()` behavior as it
+   operates on Module 5.1's `module_5_ai_package_manifest.json` shape;
+4. only then begin introducing `PrivacyClassification`/`ArtifactMetadata`
+   incrementally, per the accepted `OD-001` decision.
+
+**No numbered module is to be deleted, renamed, moved, or retired during
+this work.** Every numbered prototype script remains available and
+unmodified until its replacement demonstrates parity, per `CLAUDE.md`'s
+"Preserve the Working Prototype" rule and Architectural Decision AD-001.
+
+Changing the repository's actual GitHub visibility to public remains a
+separate, explicit, maintainer-owned action (see Phase 2's "Public Release
+Decision" and the "Immediate Action List" below) and is not implied by this
+documentation work.
 
 ## Current Recommended Next Task
 
-Prepare for the first refactoring phase (Phase 5, Shared Domain Models).
-Concretely, before any shared model or service is extracted from a prototype
-module:
+A narrowly scoped Phase 5 **testing-foundation** increment — establishing
+the ability to write and run characterization tests, not yet extracting or
+replacing any prototype behavior:
 
-1. Complete Phase 4 (Artifact Contract Inventory) — document the artifact
-   contracts already listed in `REPOSITORY_INVENTORY.md` Part 3, per the
-   required questions in the Phase 4 section below.
-2. Decide the domain-model library (`OD-001` — dataclasses vs. Pydantic vs.
-   another lightweight option), since `Rubric`/`RubricCriterion`/`RubricItem`
-   is the accepted first extraction target.
-3. Stand up a minimal automated test foundation (a runnable `pytest` setup
-   plus fixtures) and write characterization tests proving the current
-   prototype behavior for whichever module is extracted first. **No
-   extraction may proceed without this** — see the 2026-07-23 decision above,
-   Phase 5's Implementation Rules, and risk `R-002`.
+1. Add `pytest` as an explicit, intentional development/test dependency
+   (not yet done — no dependency has been added by any work to date).
+2. Establish the minimum test directory and configuration needed to run
+   `pytest` against this repository.
+3. Create synthetic fixtures reproducing the current
+   `module_5_ai_package_manifest.json` shape (Module 5.1's AI-safe package
+   manifest, per `ARTIFACT_CONTRACTS.md` Artifact 7).
+4. Write characterization tests proving the existing
+   `module_6_build_grading_package.py`'s `validate_ai_manifest()` behavior,
+   **before** extracting or replacing any of it — including:
+   - successful and failing privacy-flag cases;
+   - strict handling of missing, `true`, or non-boolean `contains_*`
+     fields (the four required-`False` checks `validate_ai_manifest()`
+     already enforces).
+5. Perform no Canvas calls, no model-provider calls, and no student-code
+   execution anywhere in this increment.
+6. Modify no numbered module during this initial test-foundation increment
+   — the tests characterize `module_6_build_grading_package.py` as it
+   exists today; they do not change it.
+
+No test, fixture, or model exists yet as of this roadmap update — this is
+the next task to perform, not a completed one. **No extraction may proceed
+without this foundation** — see the 2026-07-23 decision above, Phase 5's
+Implementation Rules, and risk `R-002`.
 
 ## Exit Criteria for Current Phase
 
-This phase is complete when:
+Phase 4's exit criteria (repository inventory exists; every major Modules
+1–8 responsibility has a proposed destination; no production code moved
+during the audit; public-release risks documented; artifact contracts
+listed; first extraction sequence agreed upon; this roadmap updated) are
+**all met** — see the detailed Phase 4 section below.
 
-- the repository inventory exists;
-- every major Modules 1–8 responsibility has a proposed destination;
-- no production code was moved during the initial audit;
-- public-release risks are documented;
-- artifact contracts are listed;
-- the first extraction sequence is agreed upon;
-- the current phase in this roadmap is updated.
+Phase 5, now current, is complete only when its own detailed exit criteria
+(below, in the Phase 5 section) are met: selected model system documented;
+first shared models implemented; current fixture artifacts load
+successfully; validation tests pass; no prototype path broken. **None of
+these are yet met.** Only the decision-making prerequisite (`OD-001`) is
+complete; no model, fixture, or test has been implemented.
 
 ---
 
@@ -286,7 +339,7 @@ Phase 0   Freeze Working Prototype                 COMPLETE
 Phase 1   Documentation Foundation                 COMPLETE
 Phase 2   Public-Release Safety Audit              COMPLETE
 Phase 3   Read-Only Repository Inventory           COMPLETE
-Phase 4   Artifact Contract Inventory              PLANNED
+Phase 4   Artifact Contract Inventory              COMPLETE
 Phase 5   Shared Domain Models                     PLANNED
 Phase 6   Application Skeleton                     PLANNED
 Phase 7   One-Submission Vertical Slice            PLANNED
@@ -586,7 +639,7 @@ deferred to Phase 13 hardening as originally implied.
 ## Status
 
 ```text
-PLANNED
+COMPLETE
 ```
 
 ## Goal
@@ -645,6 +698,30 @@ For each artifact:
 - Is it safe to commit?
 - How should incompatible versions fail?
 
+## Completed Work
+
+- [x] `ARTIFACT_CONTRACTS.md` completed and accepted.
+- [x] 30 persisted/derived artifacts documented (the 27 required by the
+      minimum list above, plus 3 additional diagnostic/preview artifacts
+      found during inspection and documented for completeness).
+- [x] Inconsistent field names and schema-version gaps identified (three
+      independent privacy-enforcement mechanisms; `schema_version`
+      inconsistent even within a single Module 6 run; three same-named
+      "validation report" artifacts with different pass/fail semantics; and
+      other findings recorded in `ARTIFACT_CONTRACTS.md`'s cross-cutting
+      sections).
+- [x] Canonical, derived, rendered, temporary, and diagnostic artifacts
+      distinguished, artifact by artifact.
+- [x] Migration and historical-compatibility needs documented (Module 3
+      v1/v2, Module 5/5.1, and other historical shapes catalogued in
+      `ARTIFACT_CONTRACTS.md`'s "Compatibility Requirements for Saved
+      Prototype Runs").
+- [x] `PrivacyClassification`/`ArtifactMetadata` selected as the first
+      contract to formalize, ahead of `Rubric`/`RubricCriterion`/
+      `RubricItem`.
+- [x] `OD-001` (domain-model-library decision) completed and accepted on
+      2026-07-24 — see `OD-001_DOMAIN_MODEL_LIBRARY.md`.
+
 ## Exit Criteria
 
 - all major artifacts documented;
@@ -652,6 +729,9 @@ For each artifact:
 - schema-version gaps identified;
 - canonical versus derived artifacts identified;
 - migration needs identified.
+
+All met. Delivered as `ARTIFACT_CONTRACTS.md` and
+`OD-001_DOMAIN_MODEL_LIBRARY.md`, both reviewed and accepted (2026-07-24).
 
 ---
 
@@ -667,13 +747,34 @@ PLANNED
 
 Introduce shared validated models without changing prototype behavior.
 
-## Decision Required
+## Decision Required — RESOLVED (`OD-001`, accepted 2026-07-24)
 
-Choose:
+The domain-model-library decision is complete. Full rationale, comparison,
+and consequences are recorded in `OD-001_DOMAIN_MODEL_LIBRARY.md`. The
+accepted policy:
 
-- dataclasses with explicit validation; or
-- Pydantic; or
-- another lightweight typed model system.
+- Pydantic v2 is the primary system for persisted artifact contracts and
+  external/trust-boundary data (Canvas data once translated into domain
+  models, provider requests/responses, and any artifact written to disk and
+  later reloaded).
+- Standard-library dataclasses remain appropriate for small, transient,
+  internal-only records that never cross a process boundary as a defined,
+  versioned contract.
+- Pydantic becomes an explicit, intentional project dependency once Phase 5
+  implementation begins — it is merely transitive today (present only
+  because the `openai` SDK depends on it; not yet declared or imported by
+  this project's own code).
+- Models are introduced incrementally, one artifact at a time — no
+  repository-wide conversion.
+- Recursive AI-safety/privacy scanning (`assert_ai_safe`-style structural
+  checking) remains independent of Pydantic model validation. A
+  schema-valid model is not automatically treated as AI-safe; the recursive
+  scan must still run.
+- Pure business logic may accept validated Pydantic domain models as
+  read-only typed inputs directly, but must not itself perform Pydantic
+  boundary operations (`model_validate`, `model_dump`, `model_json_schema`,
+  migration, or file/network I/O) — those remain at application
+  boundaries.
 
 ## Initial Model Candidates
 
@@ -716,9 +817,17 @@ ApprovalState
   module being extracted, before or alongside that extraction — decided
   2026-07-23, see Current Phase section.
 
-## Suggested First Extraction
+## Accepted First Extraction
 
-Start with the smallest stable shared contract, likely:
+This is no longer an open choice between two candidates. The accepted first
+target is:
+
+```text
+PrivacyClassification
+ArtifactMetadata
+```
+
+The next target after that is:
 
 ```text
 Rubric
@@ -726,14 +835,14 @@ RubricCriterion
 RubricItem
 ```
 
-or:
-
-```text
-PrivacyClassification
-ArtifactMetadata
-```
-
-The repository audit should decide.
+The first characterization-test target is the **current**
+`module_6_build_grading_package.py` `validate_ai_manifest()` behavior, as it
+operates on Module 5.1's `module_5_ai_package_manifest.json` shape — this is
+the artifact with the strictest current privacy enforcement in the
+pipeline (four required-`False` `contains_*` checks), making it the best
+available stress test for the new model's strictness/coercion policy before
+it is applied to any other artifact. See `OD-001_DOMAIN_MODEL_LIBRARY.md`
+Section 13 for the full reasoning.
 
 ## Exit Criteria
 
