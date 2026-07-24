@@ -49,3 +49,6 @@ canvas_exports/
 output/
 
 *.zip
+
+workspace/
+runs/
