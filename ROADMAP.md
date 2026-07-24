@@ -178,54 +178,65 @@ Prepare the repository for safe refactoring into an end-user alpha.
 - [x] `CLAUDE.md` created
 - [x] `ARCHITECTURE.md` created
 - [x] `ROADMAP.md` created
-- [ ] Public-release safety audit completed
-- [ ] Read-only repository architecture inventory completed
-- [ ] Refactor sequence reviewed and approved
+- [x] Public-release safety audit completed
+- [x] Read-only repository architecture inventory completed
+- [x] Refactor sequence reviewed and approved
 - [ ] Artifact contracts inventoried
 - [ ] First shared domain-model decision made
 
+The read-only inventory is recorded in `REPOSITORY_INVENTORY.md`. It was
+reviewed and accepted on 2026-07-23. Its proposed extraction sequence (Part 4)
+is the accepted basis for Phase 5 planning.
+
+The public-release safety audit is recorded in `PUBLIC_RELEASE_AUDIT.md`. It
+was reviewed and accepted on 2026-07-23. Its finding was **safe to publish**:
+no credentials, tokens, `.env` contents, student names/Canvas IDs, private
+manifests, submissions, ZIP files, generated output, or provider artifacts
+containing protected data exist anywhere in the repository's full Git
+history. The two non-blocking hygiene items it identified (a leaked,
+unrelated debug trace in `SELF_TEST_VALIDATOR_PATCH.txt`, and a
+`workspace/`/`runs/` `.gitignore` gap) have since been resolved.
+
+## Decision Recorded 2026-07-23
+
+A minimal automated test foundation (a runnable `pytest` setup plus fixtures)
+and characterization tests for the specific behavior being extracted must
+exist **before or alongside** the first code extraction (Phase 5). No shared
+model or service may be extracted from a prototype module that does not yet
+have a passing characterization test proving the prototype's current
+behavior. This closes the gap `REPOSITORY_INVENTORY.md` identified: zero
+automated tests exist anywhere in the repository today. See the corresponding
+rule added to Phase 5's Implementation Rules and to risk `R-002`. **This
+requirement remains binding** and is restated in the Current Recommended Next
+Task below.
+
+## Current Phase Pointer
+
+Phase 2 (Public-Release Safety Audit) and Phase 3 (Read-Only Repository
+Inventory) are both complete. The remaining Foundation-and-Repository-Audit
+deliverables — artifact contracts inventoried, first shared domain-model
+decision made — belong to Phase 4, which is next. Changing the repository's
+actual GitHub visibility to public is a separate, explicit, maintainer-owned
+action (see Phase 2's "Public Release Decision" and the "Immediate Action
+List" below) and is not implied by this documentation work.
+
 ## Current Recommended Next Task
 
-Perform a one-time, read-only repository architecture and code inventory using
-Claude Code.
+Prepare for the first refactoring phase (Phase 5, Shared Domain Models).
+Concretely, before any shared model or service is extracted from a prototype
+module:
 
-Do not move production code during this audit.
-
-The audit should map:
-
-```text
-existing module
-function or class
-current responsibility
-inputs
-outputs
-side effects
-dependencies
-artifacts read
-artifacts written
-privacy classification
-Canvas contact
-provider contact
-student-code execution
-proposed destination
-tests needed
-risks or concerns
-```
-
-The audit should identify:
-
-- duplicated logic;
-- hidden coupling;
-- inconsistent artifact formats;
-- reusable pure functions;
-- network boundaries;
-- filesystem boundaries;
-- privacy boundaries;
-- execution boundaries;
-- provider-specific logic;
-- current and missing tests;
-- public-release risks;
-- the smallest safe extraction sequence.
+1. Complete Phase 4 (Artifact Contract Inventory) — document the artifact
+   contracts already listed in `REPOSITORY_INVENTORY.md` Part 3, per the
+   required questions in the Phase 4 section below.
+2. Decide the domain-model library (`OD-001` — dataclasses vs. Pydantic vs.
+   another lightweight option), since `Rubric`/`RubricCriterion`/`RubricItem`
+   is the accepted first extraction target.
+3. Stand up a minimal automated test foundation (a runnable `pytest` setup
+   plus fixtures) and write characterization tests proving the current
+   prototype behavior for whichever module is extracted first. **No
+   extraction may proceed without this** — see the 2026-07-23 decision above,
+   Phase 5's Implementation Rules, and risk `R-002`.
 
 ## Exit Criteria for Current Phase
 
@@ -273,8 +284,8 @@ Its purpose is context recovery, not a full repository re-audit.
 ```text
 Phase 0   Freeze Working Prototype                 COMPLETE
 Phase 1   Documentation Foundation                 COMPLETE
-Phase 2   Public-Release Safety Audit              NEXT
-Phase 3   Read-Only Repository Inventory           NEXT
+Phase 2   Public-Release Safety Audit              COMPLETE
+Phase 3   Read-Only Repository Inventory           COMPLETE
 Phase 4   Artifact Contract Inventory              PLANNED
 Phase 5   Shared Domain Models                     PLANNED
 Phase 6   Application Skeleton                     PLANNED
@@ -363,7 +374,7 @@ All met.
 ## Status
 
 ```text
-NEXT
+COMPLETE
 ```
 
 ## Goal
@@ -374,19 +385,24 @@ Determine whether the repository can be safely changed from private to public.
 
 ### Current Working Tree
 
-- [ ] `.env` is not tracked
-- [ ] `.venv` is not tracked
-- [ ] generated `output/` is not tracked
-- [ ] future `workspace/` and `runs/` paths are ignored
-- [ ] downloaded ZIP files are not tracked
-- [ ] student submissions are not tracked
-- [ ] private manifests are not tracked
-- [ ] grading reports containing identity are not tracked
-- [ ] provider request/response files containing protected data are not tracked
-- [ ] no API keys are present
-- [ ] no Canvas token is present
-- [ ] no private URLs are present
-- [ ] no real student names or Canvas IDs are present
+- [x] `.env` is not tracked
+- [x] `.venv` is not tracked
+- [x] generated `output/` is not tracked
+- [x] future `workspace/` and `runs/` paths are ignored
+- [x] downloaded ZIP files are not tracked
+- [x] student submissions are not tracked
+- [x] private manifests are not tracked
+- [x] grading reports containing identity are not tracked
+- [x] provider request/response files containing protected data are not tracked
+- [x] no API keys are present
+- [x] no Canvas token is present
+- [x] no private URLs are present
+- [x] no real student names or Canvas IDs are present
+
+Verified across the complete Git history (not just the working tree) by
+`PUBLIC_RELEASE_AUDIT.md`. `workspace/` and `runs/` did not previously exist
+in the repository or its history; both are now explicit `.gitignore` entries
+ahead of Phase 9 introducing that layout.
 
 ### Full Git History
 
@@ -403,6 +419,12 @@ GitHub Actions logs
 GitHub Actions artifacts
 ```
 
+All checked — methodology and results recorded in `PUBLIC_RELEASE_AUDIT.md`.
+Two branches (`main`, `alpha-refactor`), one tag
+(`prototype-modules-1-through-8`), all 12 commits, zero deletions, one
+harmless directory-name-typo rename, no oversized/suspicious blobs, and no
+GitHub Actions artifacts (none have ever existed) were reviewed.
+
 ### Documentation
 
 - [x] README reflects the actual project
@@ -410,9 +432,12 @@ GitHub Actions artifacts
 - [x] README states prototype status
 - [x] MIT license exists
 - [x] privacy and instructor-review principles are public
-- [ ] current public limitations reviewed
+- [x] current public limitations reviewed
 - [ ] repository description updated on GitHub
 - [ ] GitHub topics selected if desired
+
+The last two are GitHub-side actions taken directly on github.com, not local
+repository changes — left for the maintainer to do at publish time.
 
 ### Suggested Local Commands
 
@@ -428,25 +453,38 @@ git log --all -- "*.json"
 git log --all -p -- .env
 ```
 
-Use a history-aware secret scanner before release.
+`PUBLIC_RELEASE_AUDIT.md` used a superset of this list, including a
+full-history content-level secret scan (`git grep <pattern> $(git rev-list
+--all)`) and a blob-size sweep — see that document for the exact commands
+used.
 
 ## Public Release Decision
 
 The repository may be made public when:
 
-- all checks pass;
-- any discovered private data is removed from history;
-- documentation accurately represents current status;
-- the instructor accepts the remaining prototype limitations.
+- all checks pass; — **met**, see `PUBLIC_RELEASE_AUDIT.md`.
+- any discovered private data is removed from history; — **n/a**, none was
+  found.
+- documentation accurately represents current status; — **met**, confirmed
+  by the audit.
+- the instructor accepts the remaining prototype limitations. — instructor
+  decision; not made by this audit.
 
 ## Exit Criteria
 
-- documented audit result;
-- no known secrets;
-- no known student data;
-- no unsafe generated artifacts;
-- GitHub branch protection/rules reviewed;
-- visibility changed to public or consciously deferred.
+- documented audit result; — met, `PUBLIC_RELEASE_AUDIT.md`.
+- no known secrets; — met.
+- no known student data; — met.
+- no unsafe generated artifacts; — met.
+- GitHub branch protection/rules reviewed; — **not yet done** — this is a
+  GitHub-side review, deferred to the actual visibility-change action below.
+- visibility changed to public or consciously deferred. — **consciously
+  deferred**: the safety audit is complete and found no blocker, but flipping
+  actual GitHub visibility is a separate, explicit, maintainer-initiated
+  action (see "Immediate Action List") not performed by this phase.
+
+All met except the two GitHub-side items above, which belong to the visibility
+change itself rather than to the safety audit.
 
 ---
 
@@ -455,7 +493,7 @@ The repository may be made public when:
 ## Status
 
 ```text
-NEXT
+COMPLETE
 ```
 
 ## Goal
@@ -530,6 +568,16 @@ notes
 - highest-risk couplings identified;
 - duplicate logic identified;
 - first safe extraction sequence proposed.
+
+All met. Delivered as `REPOSITORY_INVENTORY.md`, reviewed and accepted
+2026-07-23.
+
+## Deviation Recorded
+
+The inventory additionally found the repository has zero automated test
+coverage anywhere. Per the 2026-07-23 decision recorded in the Current Phase
+section above, this must be addressed before or alongside Phase 5, not
+deferred to Phase 13 hardening as originally implied.
 
 ---
 
@@ -661,7 +709,12 @@ ApprovalState
 - schema generation should be available where useful;
 - private and AI-safe models must remain distinguishable;
 - model adoption should begin with pure, stable contracts;
-- no repository-wide conversion in one step.
+- no repository-wide conversion in one step;
+- a minimal automated test foundation (`pytest` plus fixtures) must exist
+  before the first extraction, and a characterization test proving the
+  current prototype behavior must exist for each specific function or
+  module being extracted, before or alongside that extraction — decided
+  2026-07-23, see Current Phase section.
 
 ## Suggested First Extraction
 
@@ -1423,7 +1476,10 @@ Mitigation:
 - preserve numbered scripts;
 - golden fixtures;
 - parity tests;
-- incremental extraction.
+- incremental extraction;
+- minimal automated test foundation plus characterization tests required
+  before or alongside each extraction (decided 2026-07-23; no extraction
+  proceeds against untested behavior).
 
 ## R-003 — Private Data Enters Git History
 
@@ -1571,16 +1627,20 @@ A phase is complete when:
 
 ## Before Public Release
 
-1. [ ] Commit and push `ROADMAP.md`
-2. [ ] Perform full repository privacy and secret audit
-3. [ ] Review `.gitignore`
-4. [ ] Review GitHub Actions logs and artifacts
-5. [ ] Confirm no real student data in history
-6. [ ] Confirm no credentials in history
+1. [x] Commit and push `ROADMAP.md`
+2. [x] Perform full repository privacy and secret audit
+3. [x] Review `.gitignore`
+4. [x] Review GitHub Actions logs and artifacts
+5. [x] Confirm no real student data in history
+6. [x] Confirm no credentials in history
 7. [ ] Review repository description
 8. [ ] Decide whether to enable Issues and Discussions
 9. [ ] Change visibility to public
 10. [ ] Recheck branch protection and rules after visibility change
+
+Items 2–6 are documented in `PUBLIC_RELEASE_AUDIT.md` (reviewed and accepted
+2026-07-23). Items 7–10 are GitHub-side actions for the maintainer to take
+when actually publishing.
 
 ## After Public Release
 
