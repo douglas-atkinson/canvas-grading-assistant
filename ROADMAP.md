@@ -161,7 +161,7 @@ This run should become the foundation of a synthetic golden regression fixture.
 ## Phase Name
 
 ```text
-Foundation and Repository Audit
+Phase 4 — Artifact Contract Inventory
 ```
 
 ## Current Objective
@@ -1644,13 +1644,19 @@ when actually publishing.
 
 ## After Public Release
 
-1. [ ] Start a fresh Claude Code session
-2. [ ] Ask Claude to read the three project documents
-3. [ ] Perform the read-only repository inventory
-4. [ ] Review inventory with Doug and Sam
-5. [ ] Select the first safe extraction target
-6. [ ] Update this roadmap
-7. [ ] Begin incremental refactoring
+1. [ ] Start a fresh Claude Code session.
+2. [ ] Read `CLAUDE.md`, `ARCHITECTURE.md`, `ROADMAP.md`, `README.md`,
+   `REPOSITORY_INVENTORY.md`, and `PUBLIC_RELEASE_AUDIT.md`.
+3. [ ] Complete Phase 4 — Artifact Contract Inventory.
+4. [ ] Review `ARTIFACT_CONTRACTS.md` with Doug and Sam.
+5. [ ] Decide `OD-001`: dataclasses versus Pydantic.
+6. [ ] Establish the minimal `pytest` foundation.
+7. [ ] Add characterization tests for the first extraction target.
+8. [ ] Begin Phase 5 incremental extraction only after those tests pass.
+
+The repository inventory (`REPOSITORY_INVENTORY.md`) and the public-release
+safety audit (`PUBLIC_RELEASE_AUDIT.md`) are already complete and accepted —
+this sequence does not repeat either of them.
 
 ---
 
