@@ -161,18 +161,26 @@ This run should become the foundation of a synthetic golden regression fixture.
 ## Phase Name
 
 ```text
-Phase 5 — Shared Domain Models
+Phase 6 — Application Skeleton
 ```
 
 ## Current Objective
 
-Introduce shared, validated domain models incrementally, one artifact at a
-time, without changing prototype behavior. **No shared-model extraction may
-begin until the minimal `pytest` foundation and the relevant
-characterization test for the specific behavior being extracted both
-exist.** This requirement was decided 2026-07-23 (see "Decision Recorded
-2026-07-23" below) and remains binding now that Phase 5 is the current
-phase.
+Phase 5 (Shared Domain Models) is complete. Phase 6 (Application Skeleton)
+is the next phase. **Phase 6 implementation has not begun** — no `src/`
+application-skeleton directories beyond the Phase 5 `domain` package exist,
+no `pyproject.toml` has been created, and no CLI code has been written.
+Phase 6 will be started in a new work session, beginning with a
+lightweight, read-only startup review and a proposed smallest first
+increment for Doug and Sam to approve before any implementation — see
+"Current Recommended Next Task" below. **This documentation closeout
+introduces no Phase 6 files or behavior.**
+
+The rule that no shared model or service may be extracted from a prototype
+module without a passing characterization test proving the prototype's
+current behavior first (decided 2026-07-23, see "Decision Recorded
+2026-07-23" below) remains binding for any future domain-model extraction,
+independent of which phase is currently active.
 
 ## Current Deliverables
 
@@ -189,6 +197,14 @@ phase.
 - [x] Refactor sequence reviewed and approved
 - [x] Artifact contracts inventoried
 - [x] First shared domain-model decision made
+- [x] Phase 5 testing foundation established (`pytest`, synthetic Module 5.1
+      fixture, 83 Module 6 characterization tests)
+- [x] `PrivacyClassification` and `ArtifactMetadata` implemented as frozen,
+      strict Pydantic v2 models
+- [x] Module 5.1 historical-manifest normalization implemented in
+      `ArtifactMetadata`
+- [x] Phase 5 complete: 171 tests passing, no numbered prototype module
+      changed
 
 The read-only inventory is recorded in `REPOSITORY_INVENTORY.md`. It was
 reviewed and accepted on 2026-07-23. Its proposed extraction sequence (Part 4)
@@ -229,28 +245,28 @@ have a passing characterization test proving the prototype's current
 behavior. This closes the gap `REPOSITORY_INVENTORY.md` identified: zero
 automated tests exist anywhere in the repository today. See the corresponding
 rule added to Phase 5's Implementation Rules and to risk `R-002`. **This
-requirement remains binding** and is restated in the Current Recommended Next
-Task below.
+requirement remains binding** for any future domain-model extraction,
+independent of the currently active phase; it is not restated per-phase.
 
 ## Current Phase Pointer
 
-Phases 0 through 4 are complete: Freeze the Working Prototype,
+Phases 0 through 5 are complete: Freeze the Working Prototype,
 Documentation Foundation, Public-Release Safety Audit, Read-Only Repository
-Inventory, and Artifact Contract Inventory (including `OD-001`'s
-domain-model-library decision). Phase 5 (Shared Domain Models) is now the
-current phase. The next controlled work is, in order:
+Inventory, Artifact Contract Inventory (including `OD-001`'s
+domain-model-library decision), and Shared Domain Models (the `pytest`
+foundation, the synthetic Module 5.1 fixture, 83 Module 6 characterization
+tests, and the `PrivacyClassification`/`ArtifactMetadata` Pydantic v2
+models, including Module 5.1 historical-manifest normalization). See the
+detailed Phase 5 section below for the full completion record. Phase 6
+(Application Skeleton) is now the current phase, but **its implementation
+has not yet begun** — see "Current Recommended Next Task" below for the
+lightweight, read-only planning step a future session should take first.
 
-1. establish a minimal, runnable `pytest` foundation;
-2. add synthetic fixtures (no real student data, per `CLAUDE.md`);
-3. characterize the current Module 6 `validate_ai_manifest()` behavior as it
-   operates on Module 5.1's `module_5_ai_package_manifest.json` shape;
-4. only then begin introducing `PrivacyClassification`/`ArtifactMetadata`
-   incrementally, per the accepted `OD-001` decision.
-
-**No numbered module is to be deleted, renamed, moved, or retired during
-this work.** Every numbered prototype script remains available and
-unmodified until its replacement demonstrates parity, per `CLAUDE.md`'s
-"Preserve the Working Prototype" rule and Architectural Decision AD-001.
+**No numbered module is to be deleted, renamed, moved, or retired.** Every
+numbered prototype script remains available and unmodified until its
+replacement demonstrates parity, per `CLAUDE.md`'s "Preserve the Working
+Prototype" rule and Architectural Decision AD-001. No numbered module was
+changed by Phase 5.
 
 Changing the repository's actual GitHub visibility to public remains a
 separate, explicit, maintainer-owned action (see Phase 2's "Public Release
@@ -259,34 +275,25 @@ documentation work.
 
 ## Current Recommended Next Task
 
-A narrowly scoped Phase 5 **testing-foundation** increment — establishing
-the ability to write and run characterization tests, not yet extracting or
-replacing any prototype behavior:
+A read-only Phase 6 planning and verification session — not implementation:
 
-1. Add `pytest` as an explicit, intentional development/test dependency
-   (not yet done — no dependency has been added by any work to date).
-2. Establish the minimum test directory and configuration needed to run
-   `pytest` against this repository.
-3. Create synthetic fixtures reproducing the current
-   `module_5_ai_package_manifest.json` shape (Module 5.1's AI-safe package
-   manifest, per `ARTIFACT_CONTRACTS.md` Artifact 7).
-4. Write characterization tests proving the existing
-   `module_6_build_grading_package.py`'s `validate_ai_manifest()` behavior,
-   **before** extracting or replacing any of it — including:
-   - successful and failing privacy-flag cases;
-   - strict handling of missing, `true`, or non-boolean `contains_*`
-     fields (the four required-`False` checks `validate_ai_manifest()`
-     already enforces).
-5. Perform no Canvas calls, no model-provider calls, and no student-code
-   execution anywhere in this increment.
-6. Modify no numbered module during this initial test-foundation increment
-   — the tests characterize `module_6_build_grading_package.py` as it
-   exists today; they do not change it.
+1. Confirm the branch is `alpha-refactor` and `git status` is clean.
+2. Inspect the completed Phase 5 package
+   (`src/canvas_grading_assistant/domain/artifacts.py`) and its tests
+   (`tests/test_domain_artifacts.py`,
+   `tests/test_module_6_validate_ai_manifest.py`) to confirm the current
+   baseline (171 passing tests).
+3. Inspect Phase 6's detailed deliverables below (installable package
+   structure, `pyproject.toml`, test configuration, logging configuration,
+   domain exceptions, configuration loader, a basic preflight command) and
+   its exit criteria.
+4. Propose the smallest first Phase 6 increment — a single reviewable step,
+   not the full skeleton at once.
+5. Stop before implementation for Doug and Sam to review and approve the
+   proposed increment.
 
-No test, fixture, or model exists yet as of this roadmap update — this is
-the next task to perform, not a completed one. **No extraction may proceed
-without this foundation** — see the 2026-07-23 decision above, Phase 5's
-Implementation Rules, and risk `R-002`.
+Perform no Canvas calls, no model-provider calls, no student-code
+execution, and no code changes during this planning step.
 
 ## Exit Criteria for Current Phase
 
@@ -296,12 +303,13 @@ during the audit; public-release risks documented; artifact contracts
 listed; first extraction sequence agreed upon; this roadmap updated) are
 **all met** — see the detailed Phase 4 section below.
 
-Phase 5, now current, is complete only when its own detailed exit criteria
-(below, in the Phase 5 section) are met: selected model system documented;
-first shared models implemented; current fixture artifacts load
-successfully; validation tests pass; no prototype path broken. **None of
-these are yet met.** Only the decision-making prerequisite (`OD-001`) is
-complete; no model, fixture, or test has been implemented.
+Phase 5's exit criteria (selected model system documented; first shared
+models implemented; current fixture artifacts load successfully;
+validation tests pass; no prototype path broken) are **all met** — see the
+detailed Phase 5 section below for the full completion record.
+
+Phase 6, now current, has not yet begun implementation; its exit criteria
+(below, in the Phase 6 section) are not yet met.
 
 ---
 
@@ -340,7 +348,7 @@ Phase 1   Documentation Foundation                 COMPLETE
 Phase 2   Public-Release Safety Audit              COMPLETE
 Phase 3   Read-Only Repository Inventory           COMPLETE
 Phase 4   Artifact Contract Inventory              COMPLETE
-Phase 5   Shared Domain Models                     PLANNED
+Phase 5   Shared Domain Models                     COMPLETE
 Phase 6   Application Skeleton                     PLANNED
 Phase 7   One-Submission Vertical Slice            PLANNED
 Phase 8   Assignment Package Generalization        PLANNED
@@ -740,7 +748,7 @@ All met. Delivered as `ARTIFACT_CONTRACTS.md` and
 ## Status
 
 ```text
-PLANNED
+COMPLETE
 ```
 
 ## Goal
@@ -844,13 +852,76 @@ available stress test for the new model's strictness/coercion policy before
 it is applied to any other artifact. See `OD-001_DOMAIN_MODEL_LIBRARY.md`
 Section 13 for the full reasoning.
 
+## Completed Work
+
+- [x] `OD-001` domain-model-library decision accepted (2026-07-24): Pydantic
+      v2 selected and, upon implementation, explicitly declared as a project
+      dependency (`requirements-domain.txt`, `pydantic>=2.13,<3`) rather than
+      remaining merely transitive through `openai`.
+- [x] `requirements-dev.txt` created, declaring `pytest>=8.0` as an
+      intentional development/test dependency.
+- [x] `pytest.ini` and the `tests/` directory established, including
+      `tests/fixtures/` and a `pythonpath = src` setting so the new
+      src-layout package is importable without an editable install.
+- [x] A synthetic Module 5.1 AI-package-manifest fixture created
+      (`tests/fixtures/module_5_ai_package_manifest_valid.json`), containing
+      only synthetic data.
+- [x] 83 characterization tests written proving the current
+      `module_6_build_grading_package.py` `validate_ai_manifest()` behavior,
+      including every required-`False` `contains_*` branch, before any
+      extraction began (`tests/test_module_6_validate_ai_manifest.py`).
+- [x] `PrivacyClassification` and `ArtifactMetadata` implemented as frozen
+      Pydantic v2 models under
+      `src/canvas_grading_assistant/domain/artifacts.py`:
+      - canonical input forbids unknown fields and rejects string/integer
+        coercion into Boolean fields
+        (`model_config = ConfigDict(frozen=True, extra="forbid",
+        strict=True)`);
+      - `is_declared_ai_safe` is fail-closed: it is true only when
+        `send_to_ai` is exactly `True` **and** all four `contains_*`
+        assertions are present **and** each is exactly `False`. A missing
+        assertion, any `True` assertion, or `send_to_ai=False` all make it
+        `False`.
+- [x] `ArtifactMetadata` recognizes and normalizes Module 5.1's
+      `module_5_ai_package_manifest.json` shape through a conservative
+      before-validation compatibility path (requires a top-level `module`
+      object identifying Module 5.1, plus top-level `privacy` and `package`
+      objects — an arbitrary dictionary is not accidentally normalized). The
+      mapping is:
+      - `artifact_type` = `"ai_candidate_package_manifest"`;
+      - `schema_version` = `"prototype-module-5.1"`;
+      - `privacy.send_to_ai` copied from `package.approved_for_ai` (never
+        inferred from the four `contains_*` assertions);
+      - all four `contains_*` assertions copied independently, each
+        required to be present and a literal Boolean.
+      This normalization validates `ArtifactMetadata`'s own fields only; it
+      does not validate the complete Module 5.1 manifest and does not
+      replace `module_6_build_grading_package.py`'s `validate_ai_manifest()`,
+      which remains the authoritative validator for the full manifest.
+- [x] Recursive structural privacy scanning (`assert_ai_safe`-style
+      checking) remains an independent, required control, per `OD-001`
+      Accepted Phase 4 Decision (b) — a declared classification or a
+      successful `ArtifactMetadata` validation is evidence supporting a
+      transmission decision, not a substitute for that scan or an
+      unconditional guarantee of safety.
+- [x] 171 tests passing (83 Module 6 characterization tests plus 88
+      domain-model tests), 0 failing.
+- [x] No numbered prototype module changed.
+- [x] Latest technical commit: `798d9c3` ("Add Module 5.1 artifact metadata
+      normalization").
+
 ## Exit Criteria
 
-- selected model system documented;
-- first shared models implemented;
-- current fixture artifacts load successfully;
-- validation tests pass;
-- no prototype path broken.
+- selected model system documented — met, `OD-001_DOMAIN_MODEL_LIBRARY.md`;
+- first shared models implemented — met, `PrivacyClassification` and
+  `ArtifactMetadata`;
+- current fixture artifacts load successfully — met, the synthetic Module
+  5.1 fixture normalizes successfully through `ArtifactMetadata`;
+- validation tests pass — met, 171 tests passing;
+- no prototype path broken — met, no numbered module changed and all 83
+  existing Module 6 characterization tests continue to pass unmodified.
+
+All met.
 
 ---
 
@@ -1752,53 +1823,55 @@ Items 2–6 are documented in `PUBLIC_RELEASE_AUDIT.md` (reviewed and accepted
 2026-07-23). Items 7–10 are GitHub-side actions for the maintainer to take
 when actually publishing.
 
-## Phase 5 Startup Checklist
+## Phase 5 Startup Checklist (Complete)
 
 1. [x] Start a fresh Claude Code session.
 2. [x] Run the lightweight Session Startup Protocol.
 3. [x] Complete Phase 4 — Artifact Contract Inventory.
 4. [x] Review and accept `ARTIFACT_CONTRACTS.md`.
 5. [x] Resolve and accept `OD-001`.
-6. [ ] Establish the minimal `pytest` foundation.
-7. [ ] Add characterization tests for the first extraction target.
-8. [ ] Begin Phase 5 model extraction only after those tests pass.
+6. [x] Establish the minimal `pytest` foundation.
+7. [x] Add characterization tests for the first extraction target.
+8. [x] Complete Phase 5 model extraction (`PrivacyClassification`,
+      `ArtifactMetadata`, and Module 5.1 historical normalization).
 
-Items 1–5 are complete: `ARTIFACT_CONTRACTS.md` and
-`OD-001_DOMAIN_MODEL_LIBRARY.md` were reviewed and accepted (2026-07-24).
-Items 6–8 remain — see "Current Recommended Next Task" above for the
-detailed testing-foundation increment. This checklist does not repeat the
-repository inventory or public-release audit, both already complete and
-accepted (`REPOSITORY_INVENTORY.md`, `PUBLIC_RELEASE_AUDIT.md`).
+All eight items are complete. Phase 5 is closed — see the detailed Phase 5
+section above for the full completion record. This checklist does not
+repeat the repository inventory or public-release audit, both already
+complete and accepted (`REPOSITORY_INVENTORY.md`, `PUBLIC_RELEASE_AUDIT.md`).
 
 ---
 
-# First Phase 5 Claude Code Startup Prompt
+# First Phase 6 Claude Code Startup Prompt
 
-A recommended startup-only prompt for a new session beginning Phase 5 work.
-This prompt is read-only and confirmatory — it does not authorize
+A recommended startup-only prompt for a new session beginning Phase 6
+planning. This prompt is read-only and confirmatory — it does not authorize
 implementation:
 
 ```text
-Read CLAUDE.md, ARCHITECTURE.md, ROADMAP.md, ARTIFACT_CONTRACTS.md,
-OD-001_DOMAIN_MODEL_LIBRARY.md, and README.md.
+Read CLAUDE.md, ARCHITECTURE.md, and ROADMAP.md.
 
-Confirm the current Git branch and run git status.
+Confirm the current Git branch is alpha-refactor and run git status to
+confirm a clean working tree.
 
-Review the latest commits relevant to the current phase.
+Review the latest commits relevant to Phase 5's completion (through commit
+798d9c3) and the current Phase 6 section below.
 
-Summarize the current Phase 5 state: what is complete (Phases 0-4, the
-OD-001 domain-model-library decision), what the accepted first model
-target is (PrivacyClassification / ArtifactMetadata), and what the
-testing-foundation increment requires before any extraction begins.
+Inspect the completed Phase 5 package
+(src/canvas_grading_assistant/domain/artifacts.py) and its tests
+(tests/test_domain_artifacts.py, tests/test_module_6_validate_ai_manifest.py)
+to confirm the 171-test baseline.
 
-Identify the testing-foundation increment (pytest setup, synthetic
-Module 5.1 AI-package-manifest fixtures, and characterization tests for
-Module 6's validate_ai_manifest()) as the next task.
+Inspect Phase 6's detailed deliverables and exit criteria in ROADMAP.md.
+
+Propose the smallest first Phase 6 increment - a single reviewable step, not
+the full application skeleton at once.
 
 Make no edits, commits, dependency changes, Canvas calls, model-provider
 calls, or student-code execution.
 
-Stop for Doug and Sam to review before any implementation begins.
+Stop for Doug and Sam to review and approve the proposed increment before
+any implementation begins.
 ```
 
 ---

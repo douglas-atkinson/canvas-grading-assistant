@@ -13,9 +13,23 @@ dependency was added or removed; no test was created; no numbered module was
 touched. It completes Phase 4's remaining deliverable list item "domain-model
 library decision" without beginning Phase 5 implementation.
 
-**Status: ACCEPTED - 2026-07-24.** Nothing in `ROADMAP.md` is updated by
-this document; recording the decision there remains a separate, later step,
-and this document does not begin Phase 5 implementation.
+**Status: ACCEPTED - 2026-07-24.** At the time this decision was recorded,
+nothing in `ROADMAP.md` had yet been updated by this document; that
+remained a separate, later step, and this document did not itself begin
+Phase 5 implementation.
+
+**Implementation status (added at Phase 5 closeout):** Phase 5 is now
+complete on `alpha-refactor` (latest technical commit `798d9c3`).
+`PrivacyClassification` and `ArtifactMetadata` are implemented as frozen,
+strict Pydantic v2 models; Pydantic is explicitly declared
+(`requirements-domain.txt`, `pydantic>=2.13,<3`); a `pytest` foundation and
+171 passing tests are established; Module 5.1 historical-manifest
+compatibility normalization is implemented in `ArtifactMetadata`;
+`is_declared_ai_safe` adopted fail-closed semantics; recursive structural
+privacy scanning remains independent of Pydantic validation, per Accepted
+Phase 4 Decision (b) below. `ROADMAP.md` now records Phase 5 as COMPLETE.
+Phase 5's exit criteria (Section 13's recommendation below, and the
+criteria listed in `ROADMAP.md`'s Phase 5 section) are met.
 
 ---
 

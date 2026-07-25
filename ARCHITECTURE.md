@@ -571,6 +571,11 @@ Responsible for:
 - domain exceptions;
 - score and approval semantics.
 
+The first two models, `PrivacyClassification` and `ArtifactMetadata`, are
+implemented under `src/canvas_grading_assistant/domain/` as of Phase 5 — see
+AD-012 for the full implementation record. The remaining examples below
+represent future targets, not yet implemented.
+
 Examples:
 
 ```text
@@ -2112,6 +2117,39 @@ schema-generation, or I/O of its own. `PrivacyClassification`/
 `ArtifactMetadata` is the first model target.
 
 Full rationale is in `OD-001_DOMAIN_MODEL_LIBRARY.md`.
+
+**Implementation outcome (Phase 5, complete):** `PrivacyClassification` and
+`ArtifactMetadata` are implemented under
+`src/canvas_grading_assistant/domain/artifacts.py`. Both are frozen after
+validation and forbid unknown fields on canonical current-version input.
+Boolean fields use strict validation, so string and integer values (for
+example `"true"`, `"false"`, `1`, `0`) are rejected rather than coerced.
+Declared AI-safety fails closed: `PrivacyClassification.is_declared_ai_safe`
+is true only when `send_to_ai` is exactly `True` and all four `contains_*`
+assertions are explicitly present and exactly `False`; a missing assertion
+is never treated as if it were `False`.
+
+`ArtifactMetadata` additionally recognizes Module 5.1's
+`module_5_ai_package_manifest.json` shape through a conservative
+before-validation normalization boundary — activated only when a top-level
+`module` object identifies Module 5.1 alongside top-level `privacy` and
+`package` objects, so an arbitrary dictionary is never accidentally
+reinterpreted as this historical shape. The historical
+`package.approved_for_ai` value maps to `privacy.send_to_ai`; the four
+`contains_*` assertions are copied independently, never collapsed or
+inferred; and the normalized `artifact_type` is
+`"ai_candidate_package_manifest"` — identifying the artifact as a candidate
+for the AI-facing pipeline, not asserting that it is safe or approved. This
+compatibility adapter validates `ArtifactMetadata`'s own fields only and
+does not replace `module_6_build_grading_package.py`'s
+`validate_ai_manifest()`, which remains the authoritative validator for the
+complete manifest.
+
+Recursive structural privacy scanning (`assert_ai_safe`-style checking)
+remains an independent, required control, unchanged by this implementation.
+A completed declaration and successful validation are evidence supporting a
+transmission decision; they are not an unconditional guarantee that an
+artifact is safe.
 
 ---
 

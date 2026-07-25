@@ -673,29 +673,36 @@ This startup review should be lightweight. Its purpose is to restore context and
 
 ## Current Project Phase
 
-Phases 0 through 4 are complete: Freeze the Working Prototype, Documentation
-Foundation, Public-Release Safety Audit, Read-Only Repository Inventory, and
+Phases 0 through 5 are complete: Freeze the Working Prototype, Documentation
+Foundation, Public-Release Safety Audit, Read-Only Repository Inventory,
 Artifact Contract Inventory (including the OD-001 domain-model-library
-decision). See `ROADMAP.md` for full phase detail.
+decision), and Shared Domain Models. See `ROADMAP.md` for full phase detail.
 
-**Phase 5 — Shared Domain Models is the current phase.**
+**Phase 6 — Application Skeleton is next. Phase 6 implementation has not
+begun.**
 
-The immediate next increment is the testing foundation, not model
-extraction:
+Phase 5 delivered:
 
-- add `pytest` as an intentional test dependency;
-- establish minimal test configuration and directories;
-- add synthetic Module 5.1 AI-package-manifest fixtures;
-- characterize the current Module 6 `validate_ai_manifest()` behavior.
+- a `pytest` foundation (`requirements-dev.txt`, `pytest.ini`, `tests/`);
+- a synthetic Module 5.1 AI-package-manifest fixture;
+- 83 characterization tests proving Module 6's `validate_ai_manifest()`
+  behavior;
+- `PrivacyClassification` and `ArtifactMetadata`, implemented as frozen,
+  strict Pydantic v2 models under
+  `src/canvas_grading_assistant/domain/artifacts.py`, including Module 5.1
+  historical-manifest normalization (validates `ArtifactMetadata` fields
+  only; does not replace `validate_ai_manifest()`).
 
-No shared-model extraction may begin until the relevant characterization
-tests pass. `PrivacyClassification`/`ArtifactMetadata` is the accepted first
-model target (see `ARTIFACT_CONTRACTS.md` and
-`OD-001_DOMAIN_MODEL_LIBRARY.md`).
+The current test baseline is **171 passing tests**. Numbered Modules 1–8
+remain preserved and unchanged — no numbered module was modified during
+Phase 5.
 
-No numbered module may be deleted, renamed, moved, retired, or modified
-during the initial testing-foundation increment. That increment makes no
-Canvas calls, no model-provider calls, and executes no student code.
+A future session beginning Phase 6 should start with a lightweight,
+read-only planning review (confirm branch and clean status, inspect the
+completed Phase 5 package and tests, inspect Phase 6's deliverables in
+`ROADMAP.md`, propose the smallest first increment) and stop for Doug and
+Sam to review before any implementation begins — see `ROADMAP.md`'s
+"Current Recommended Next Task" for the exact pointer.
 
 ---
 
