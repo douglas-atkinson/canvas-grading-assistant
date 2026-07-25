@@ -242,11 +242,12 @@ and characterization tests for the specific behavior being extracted must
 exist **before or alongside** the first code extraction (Phase 5). No shared
 model or service may be extracted from a prototype module that does not yet
 have a passing characterization test proving the prototype's current
-behavior. This closes the gap `REPOSITORY_INVENTORY.md` identified: zero
-automated tests exist anywhere in the repository today. See the corresponding
-rule added to Phase 5's Implementation Rules and to risk `R-002`. **This
-requirement remains binding** for any future domain-model extraction,
-independent of the currently active phase; it is not restated per-phase.
+behavior. This closes the gap `REPOSITORY_INVENTORY.md` identified: the
+inventory identified that, at that time, the repository had zero automated
+tests. See the corresponding rule added to Phase 5's Implementation Rules
+and to risk `R-002`. **This requirement remains binding** for any future
+domain-model extraction, independent of the currently active phase; it is
+not restated per-phase.
 
 ## Current Phase Pointer
 
@@ -635,10 +636,11 @@ All met. Delivered as `REPOSITORY_INVENTORY.md`, reviewed and accepted
 
 ## Deviation Recorded
 
-The inventory additionally found the repository has zero automated test
-coverage anywhere. Per the 2026-07-23 decision recorded in the Current Phase
-section above, this must be addressed before or alongside Phase 5, not
-deferred to Phase 13 hardening as originally implied.
+The inventory additionally found that the repository had zero automated
+test coverage at the time of the inventory. Per the 2026-07-23 decision
+recorded in the Current Phase section above, this was subsequently
+addressed during Phase 5, not deferred to Phase 13 hardening as originally
+implied.
 
 ---
 
@@ -768,10 +770,11 @@ accepted policy:
 - Standard-library dataclasses remain appropriate for small, transient,
   internal-only records that never cross a process boundary as a defined,
   versioned contract.
-- Pydantic becomes an explicit, intentional project dependency once Phase 5
-  implementation begins — it is merely transitive today (present only
-  because the `openai` SDK depends on it; not yet declared or imported by
-  this project's own code).
+- Pydantic became an explicit, intentional project dependency during Phase
+  5. It is declared in `requirements-domain.txt`
+  (`pydantic>=2.13,<3`), and the project's own domain code now imports and
+  uses it directly, rather than depending on it only transitively through
+  the `openai` SDK.
 - Models are introduced incrementally, one artifact at a time — no
   repository-wide conversion.
 - Recursive AI-safety/privacy scanning (`assert_ai_safe`-style structural
@@ -825,23 +828,30 @@ ApprovalState
   module being extracted, before or alongside that extraction — decided
   2026-07-23, see Current Phase section.
 
-## Accepted First Extraction
+## Accepted First Extraction — COMPLETE
 
 This is no longer an open choice between two candidates. The accepted first
-target is:
+target was:
 
 ```text
 PrivacyClassification
 ArtifactMetadata
 ```
 
-The next target after that is:
+`PrivacyClassification` and `ArtifactMetadata` were implemented in Phase 5
+(see "Completed Work" below).
+
+The next shared-domain-model target, when domain-model extraction resumes,
+is:
 
 ```text
 Rubric
 RubricCriterion
 RubricItem
 ```
+
+This is a future target; it is not the immediate Phase 6 task. Phase 6 is
+the application skeleton, not further domain-model extraction.
 
 The first characterization-test target is the **current**
 `module_6_build_grading_package.py` `validate_ai_manifest()` behavior, as it
@@ -1854,7 +1864,8 @@ Read CLAUDE.md, ARCHITECTURE.md, and ROADMAP.md.
 Confirm the current Git branch is alpha-refactor and run git status to
 confirm a clean working tree.
 
-Review the latest commits relevant to Phase 5's completion (through commit
+Review the latest commits relevant to Phase 5's completion (through the
+Phase 5 closeout commit db74e83, including the technical model commit
 798d9c3) and the current Phase 6 section below.
 
 Inspect the completed Phase 5 package

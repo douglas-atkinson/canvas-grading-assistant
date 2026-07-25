@@ -590,7 +590,13 @@ not appropriate for every kind of input this project handles:
 
 ---
 
-## 13. Initial Phase 5 Model Recommendation
+## 13. Initial Phase 5 Model Recommendation — IMPLEMENTED
+
+`PrivacyClassification`, `ArtifactMetadata`, and the Module 5.1
+compatibility normalization described below were implemented and tested
+during Phase 5 (171 passing tests; see `ROADMAP.md`'s Phase 5 section for
+the full completion record). The recommendation and rationale below are
+preserved as originally written.
 
 This document does not revise `ARTIFACT_CONTRACTS.md`'s already-accepted
 Phase 4 Decision (a): **`PrivacyClassification`/`ArtifactMetadata` remains
@@ -638,7 +644,7 @@ policy (Section 9) before it is applied to any other artifact.
 
 ---
 
-## Summary
+## Original Decision Summary and Current Outcome
 
 - **File created:** `OD-001_DOMAIN_MODEL_LIBRARY.md` (this file).
 - **Files inspected:** `CLAUDE.md`, `ARCHITECTURE.md`, `ROADMAP.md`,
@@ -649,9 +655,11 @@ policy (Section 9) before it is applied to any other artifact.
 - **Recommended OD-001 decision (ACCEPTED 2026-07-24):** Pydantic v2 as the
   primary system for persisted artifact contracts and trust-boundary data;
   standard dataclasses remain appropriate for small, internal,
-  non-persisted, runtime-only records; Pydantic should become an explicit,
-  intentional dependency when Phase 5 begins (it is merely transitive
-  today); models are introduced incrementally, per artifact, starting with
+  non-persisted, runtime-only records; Pydantic was merely transitive when
+  this decision was accepted, and the decision called for it to become an
+  explicit, intentional dependency once Phase 5 began — it did, during
+  Phase 5 (`requirements-domain.txt`, `pydantic>=2.13,<3`); models are
+  introduced incrementally, per artifact, starting with
   `PrivacyClassification`/`ArtifactMetadata`; privacy scanning remains
   independent of Pydantic validation.
 - **Corrected policies in this revision (Sections 8-9):** numeric score/point
@@ -681,10 +689,11 @@ policy (Section 9) before it is applied to any other artifact.
   Section 14 names "future Pydantic v3 breakage" as a first-class condition
   for revisiting this decision rather than treating the choice as
   permanent.
-- **Proposed first Phase 5 model:** `PrivacyClassification`/
-  `ArtifactMetadata`, as a Pydantic v2 model, with its first
-  characterization test built against Module 5.1's
-  `module_5_ai_package_manifest.json` shape.
+- **Implemented first Phase 5 models:** `PrivacyClassification` and
+  `ArtifactMetadata`, as Pydantic v2 models, with the first characterization
+  test built against Module 5.1's `module_5_ai_package_manifest.json`
+  shape, and `ArtifactMetadata`'s Module 5.1 compatibility normalization
+  path also implemented and tested. 171 tests pass.
 - **Unresolved concerns:**
   1. Whether `ModelRequest`/`ProviderResponse` (`module_7/models.py`) should
      convert to Pydantic early (given they already partially cross the
@@ -699,10 +708,13 @@ policy (Section 9) before it is applied to any other artifact.
      `ARTIFACT_CONTRACTS.md`'s Summary (the items inherited from
      `REPOSITORY_INVENTORY.md` Part 5) remain open and are not re-litigated
      here.
-- **Confirmation that no existing file changed:** Confirmed. Only
+- **Confirmation that no existing file changed when this decision record was
+  originally created (2026-07-24):** Confirmed. At that time, only
   `OD-001_DOMAIN_MODEL_LIBRARY.md` was created. No production Python code,
   schema, configuration, or existing documentation (including `ROADMAP.md`
   and `ARTIFACT_CONTRACTS.md`) was modified, renamed, moved, staged,
   committed, or pushed. No dependency was added or removed. No numbered
   module was touched. No Canvas, model-provider, or other network call was
-  made. No student code was compiled or executed.
+  made. No student code was compiled or executed. (Phase 5 implementation
+  and this document's own subsequent updates naturally postdate that
+  original, unmodified-repository snapshot.)
